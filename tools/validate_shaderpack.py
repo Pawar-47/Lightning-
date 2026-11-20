@@ -113,6 +113,21 @@ if "VOL_LIGHT=1" not in performance_profile:
     fail("Performance profile must retain the cheaper depth-based godray path (VOL_LIGHT=1)")
 if "VOL_LIGHT=2" not in quality_profile:
     fail("Quality profile must retain the full shadow-aware volumetric-light path (VOL_LIGHT=2)")
+
+# Guard the user-required feature set in the actual low-cost profile, not just
+# in config.glsl. Exact whitespace tokens avoid accidental substring matches.
+required_performance_tokens = [
+    "SHADOW_CASTING", "COLORED_SHADOW", "DOF", "MOTION_BLUR",
+    "CLOUD_REFLECTION", "END_CLOUDS", "BLOOM", "MATERIAL_GLOSS",
+    "REFLECTION_SLIDER=2", "REFRACTION=1", "SUN_REFLECTION=1",
+    "AO=1", "AA_TYPE=2", "V_CLOUDS=1", "VOL_LIGHT=1",
+]
+performance_tokens = set(performance_profile.split())
+for token in required_performance_tokens:
+    if token not in performance_tokens:
+        fail(f"Performance profile has dropped a required rendering feature: {token}")
+    if "!" + token in performance_tokens:
+        fail(f"Performance profile explicitly disables a required rendering feature: {token}")
 for token in ["AOSTEPS=4", "CLOUD_STEPS_AVG=7", "MOTION_BLUR_SAMPLES=3", "BLOOM_SAMPLES=2.0"]:
     if token not in performance_profile:
         fail(f"Performance profile is missing its bounded feature budget: {token}")
