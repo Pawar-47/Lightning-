@@ -59,6 +59,15 @@ for relative in required:
         fail(f"required feature source missing: shaders/{relative}")
 
 
+water_text = (SHADERS / "lib/water.glsl").read_text(encoding="utf-8", errors="replace")
+if "outOfEyeFlag" in water_text or "return screenMarchPos;" not in water_text:
+    fail("SSR out-of-screen early-return optimization is missing or incomplete")
+for cloud_path in ["lib/volumetric_clouds.glsl", "lib/volumetric_clouds_end.glsl"]:
+    cloud_text = (SHADERS / cloud_path).read_text(encoding="utf-8", errors="replace")
+    if cloud_text.count("if (cloud_value >= opacity_dist)") != 1:
+        fail(f"opacity-saturation early exit is missing or duplicated: shaders/{cloud_path}")
+
+
 
 language_files = [
     "en_US.lang", "es_AR.lang", "es_ES.lang", "es_MX.lang",
