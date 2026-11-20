@@ -40,41 +40,41 @@ VERSION_DIRECTIVE = re.compile(rb"(?m)^#version[ \t]+120")
 OPTIMIZATION_PATCHES = {
     "shaders/lib/water.glsl": [
         (
-            b"    bool outOfEyeFlag = false;\\n",
+            b"    bool outOfEyeFlag = false;\n",
             b"",
         ),
         (
-            b"        ) {\\n            outOfEyeFlag = true;\\n        }\\n\\n        if (screenMarchPos.z > 0.9999) {",
-            b"        ) {\\n"
-            b"            // The existing fallback returns this exact ray point with infinite=1.\\n"
-            b"            // Exit now instead of performing the remaining screen-depth iterations.\\n"
-            b"            infinite = 1.0;\\n"
-            b"            return screenMarchPos;\\n"
-            b"        }\\n\\n"
+            b"        ) {\n            outOfEyeFlag = true;\n        }\n\n        if (screenMarchPos.z > 0.9999) {",
+            b"        ) {\n"
+            b"            // The existing fallback returns this exact ray point with infinite=1.\n"
+            b"            // Exit now instead of performing the remaining screen-depth iterations.\n"
+            b"            infinite = 1.0;\n"
+            b"            return screenMarchPos;\n"
+            b"        }\n\n"
             b"        if (screenMarchPos.z > 0.9999) {",
         ),
         (
-            b"    if (outOfEyeFlag) {\\n        infinite = 1.0;\\n        return screenMarchPos;\\n    } else if (toFar) {",
+            b"    if (outOfEyeFlag) {\n        infinite = 1.0;\n        return screenMarchPos;\n    } else if (toFar) {",
             b"    if (toFar) {",
         ),
     ],
     "shaders/lib/volumetric_clouds.glsl": [
         (
             b"            intersection_pos += increment;",
-            b"            // The final opacity is clamped to 1.0; later samples cannot change it.\\n"
-            b"            if (cloud_value >= opacity_dist) {\\n"
-            b"                break;\\n"
-            b"            }\\n\\n"
+            b"            // The final opacity is clamped to 1.0; later samples cannot change it.\n"
+            b"            if (cloud_value >= opacity_dist) {\n"
+            b"                break;\n"
+            b"            }\n\n"
             b"            intersection_pos += increment;",
         ),
     ],
     "shaders/lib/volumetric_clouds_end.glsl": [
         (
             b"            intersection_pos += increment;",
-            b"            // The final opacity is clamped to 1.0; later samples cannot change it.\\n"
-            b"            if (cloud_value >= opacity_dist) {\\n"
-            b"                break;\\n"
-            b"            }\\n\\n"
+            b"            // The final opacity is clamped to 1.0; later samples cannot change it.\n"
+            b"            if (cloud_value >= opacity_dist) {\n"
+            b"                break;\n"
+            b"            }\n\n"
             b"            intersection_pos += increment;",
         ),
     ],
