@@ -73,6 +73,8 @@ def shaderpackMetadataFiles = fileTree(projectDir) {
     include 'pack.mcmeta'
     include 'lang/**'
     include 'LICENSE*'
+    include 'LICENSES/**'
+    include 'THIRD_PARTY_NOTICES.md'
 }
 def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
 def shaderpackIncludes = copySpec {
@@ -82,6 +84,8 @@ def shaderpackIncludes = copySpec {
         include 'pack.mcmeta'
         include 'lang/**'
         include 'LICENSE*'
+        include 'LICENSES/**'
+        include 'THIRD_PARTY_NOTICES.md'
     }
 }
 def shaderpackStaticIncludes = copySpec {
@@ -90,6 +94,8 @@ def shaderpackStaticIncludes = copySpec {
         include 'pack.mcmeta'
         include 'lang/**'
         include 'LICENSE*'
+        include 'LICENSES/**'
+        include 'THIRD_PARTY_NOTICES.md'
     }
 }
 
