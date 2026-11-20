@@ -50,7 +50,7 @@ The original archive versions are identified by their Git blob hashes in the sou
 - `shaders/lib/config.glsl`: `7c8f086dfa749f2c61707782786897620a3564d5`
 - `shaders/shaders.properties`: `712ebede6b2ad78a92ee6cb39bf1f5fb07bdfdb1`
 
-The active config restores the requested rendering features and applies Lightning's lower-cost budgets. The active pack-root `shaders.properties` merges the original settings UI with Lightning's Performance and Quality profiles. Their line-by-line semantic diff remains a separate review item; neither is falsely labelled byte-identical.
+The active config restores the requested rendering features and applies Lightning's lower-cost budgets. The active pack-root `shaders.properties` merges the original settings UI with Lightning's Performance and Quality profiles. It also retains the source's conditional composite-pass rules so those passes execute whenever their effects are enabled. Their line-by-line semantic diff remains a separate review item; neither is falsely labelled byte-identical.
 
 ## What this does not prove
 

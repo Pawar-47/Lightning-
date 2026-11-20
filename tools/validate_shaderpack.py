@@ -103,7 +103,7 @@ required_defines = [
 for pattern in required_defines:
     if not re.search(pattern, config_text, re.MULTILINE):
         fail(f"feature define is not enabled: {pattern}")
-for option in ["profile.Performance=", "profile.Quality=", "screen.ADVANCED_SCREEN", "program.shadow.enabled=SHADOW_CASTING"]:
+for option in ["profile.Performance=", "profile.Quality=", "screen.ADVANCED_SCREEN", "program.shadow.enabled=SHADOW_CASTING", "program.composite1.enabled=BLOOM || DOF", "program.composite2.enabled=AA_TYPE || MOTION_BLUR"]:
     if option not in properties_text:
         fail(f"shader options/profile configuration missing: {option}")
 

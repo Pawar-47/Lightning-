@@ -24,8 +24,9 @@ This map records where the MakeUp-derived feature implementation lives and which
 
 - Keep the shadow pass active whenever shadow casting is enabled.
 - Keep deferred processing active for AO, cloud composition and scene preparation.
-- Keep composite1 active for bloom/DOF.
-- Keep composite2 active for temporal AA/motion blur.
+- Keep composite1 enabled whenever either bloom or DOF is enabled (`program.composite1.enabled=BLOOM || DOF`).
+- Keep composite2 enabled whenever either AA or motion blur is enabled (`program.composite2.enabled=AA_TYPE || MOTION_BLUR`).
+- The Performance and Quality profiles enable both passes; they are skipped only in profiles where both effects belonging to that pass are disabled.
 - Do not drop any pass solely to improve an FPS number.
 - If a pass can be skipped only when all of its effects are disabled, document the exact condition and ensure the Performance profile does not satisfy that condition.
 
