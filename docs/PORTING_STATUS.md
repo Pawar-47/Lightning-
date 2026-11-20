@@ -41,9 +41,9 @@ See [`SOURCE_PORT_VERIFICATION.md`](SOURCE_PORT_VERIFICATION.md) for the per-fam
 
 ## CI evidence
 
-- Latest verified run: [44818817382](https://github.com/Pawar-47/Lightning-/actions/runs/44818817382) — completed successfully on commit `e329853e8b6b8955490fb0b0b698f613483752a1`.
-- All workflow steps passed: static shader structure/include checks, required-feature assertions for the Performance profile, source-port audit-tool syntax check, Java/Gradle setup, shaderpack ZIP packaging and artifact upload.
-- The distributable CI artifact is `Lightning-shaderpack`, 378,048 bytes (artifact ID `14669679502`; SHA-256 `03ba4ae438351ec983e22f0e41a6e26852d79619c6a66284255be4ffe0c52b71`). The ZIP now carries the LGPL license text and third-party attribution notice.
+- Latest verified run: [44819601043](https://github.com/Pawar-47/Lightning-/actions/runs/44819601043) — completed successfully on commit `fbd161790928e9ecbf37fc1b2ead3a931ea5c0e2`.
+- All workflow steps passed: static shader structure/include checks, required-feature and early-exit optimization assertions, source-port audit-tool syntax check, Java/Gradle setup, shaderpack ZIP packaging and artifact upload.
+- The distributable CI artifact is `Lightning-shaderpack`, 378,244 bytes (artifact ID `14672080062`; SHA-256 `d6238039d57491f5a6ea9908b89429e036ba15bcfa9a34f69a9fe4f8dbbc7227`). The ZIP carries the LGPL license text and third-party attribution notice.
 - The workflow syntax-checks `tools/verify_source_port.py`; it does not execute the full ZIP comparison because the user-uploaded archive is not stored in the repository.
 - CI structure/package checks are not GLSL stage compilation, Iris runtime loading, visual comparison or target-hardware benchmarking.
 ## Known gaps — do not mark complete
