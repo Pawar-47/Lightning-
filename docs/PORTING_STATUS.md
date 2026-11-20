@@ -26,13 +26,13 @@ The uploaded archive contains 348 actual files (742,051 uncompressed bytes) afte
 ## Current implementation checkpoint
 
 - Template Gradle build foundation imported; project identity changed to Lightning (`dev.pawar47.lightning`, `0.1.0-alpha.1`).
-- **Source-to-port comparison: 346/348 files verified.** The 136 unchanged files are byte-identical to the uploaded ZIP. All 210 `.fsh/.vsh` entrypoints are verified against the uploaded ZIP after only the `#version 120` → `#version 330 compatibility` migration.
-- The 100 shared modules comprise 41 `common/`, 37 non-config `lib/`, and 22 `src/` files. Their uploaded-ZIP Git blob hashes match their active repository destinations.
+- **Source-to-port comparison: 346/348 files verified through deterministic transformations.** 133 files are byte-identical to the uploaded ZIP; all 210 `.fsh/.vsh` entrypoints differ only by the `#version 120` → `#version 330 compatibility` migration; three library modules have explicitly documented, reproducible early-exit optimizations. The two config/options exceptions remain separately identified.
+- The 100 shared modules comprise 41 `common/`, 37 non-config `lib/`, and 22 `src/` files. Of the 37 non-config library files, 34 remain byte-identical and three are tracked deterministic optimization derivatives.
 - All 17 metadata/Voxy files have exact uploaded-ZIP hash matches.
 - All 19 documentation, language and texture assets have exact uploaded-ZIP hash matches.
 - The two archive-specific exceptions (`shaders/lib/config.glsl` and `shaders/shaders.properties`) are intentionally customized/merged. Their exact original Git blob hashes are recorded in the final column of `reference/source-file-map.csv`; the active config is feature-restored and tuned, while the active root properties file merges the original settings UI with Lightning profiles.
 - The source `shaders/shaders.properties` is intentionally relocated/merged into the pack-root `shaders.properties`.
-- All 210 entrypoints declare GLSL 330. Shared shader modules retain their source contents.
+- All 210 entrypoints declare GLSL 330. Shared shader modules retain their source contents except for the three documented deterministic early-exit optimization derivatives.
 - Full MakeUp settings UI and original option screens are present. Lightning adds `Performance` and `Quality` profiles.
 - Performance profile retains the major effects. It uses bounded budgets and the cheaper depth-based godray path (`VOL_LIGHT=1`); Quality retains the full shadow-aware volumetric-light path (`VOL_LIGHT=2`).
 - Added `tools/validate_shaderpack.py` and `.github/workflows/shaderpack-validation.yml`.

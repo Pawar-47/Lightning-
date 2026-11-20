@@ -29,10 +29,10 @@ Individual effects may be user-configurable, but the Performance profile must us
 |---|---|
 | Dynamic shadows | One shadow pass; conservative map resolution/distance; Iris shadow culling; reduced PCF taps; measure CPU geometry cost |
 | Coloured shadows | Keep colour-shadow path; limit eligible translucent casters; minimize colour-buffer cost |
-| Volumetric clouds | Fixed low step budget, early transmittance termination, distance LOD and cheaper far-field noise |
+| Volumetric clouds | Fixed low step budget, exact early exit once accumulated opacity reaches the final clamp threshold, distance LOD and cheaper far-field noise |
 | Cloud reflections | Limited-sample reflection approximation; do not raymarch the full cloud volume for every water pixel |
 | End clouds | Dimension-specific reduced step budget, not a disabled feature |
-| SSR | Bounded depth-aware march, growing steps, edge rejection and fallback reflections |
+| SSR | Bounded depth-aware march, immediate return on out-of-screen rays, edge rejection and fallback reflections |
 | Refraction | Reuse water normals; bounded screen offset and fewer redundant texture reads |
 | Sun/moon reflections | Analytic directional highlight plus bounded screen-space contribution |
 | AO | Compact sample kernel; evaluate half-resolution plus depth-aware upsampling; avoid halos |

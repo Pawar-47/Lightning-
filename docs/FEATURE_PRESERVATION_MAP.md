@@ -6,10 +6,10 @@ This map records where the MakeUp-derived feature implementation lives and which
 |---|---|---|---|
 | Dynamic shadows | `lib/shadow_frag.glsl`, `lib/shadow_vertex.glsl`, dimension `shadow.fsh/.vsh` wrappers | Shadow tier 1, distance tier 0; shadow culling enabled | Enabled in config/profile; compile/runtime pending |
 | Coloured shadows | `config.glsl` `COLORED_SHADOW`, shadow and deferred colour path | Keep colour path; constrain shadow distance/map tier | Enabled; visual validation pending |
-| Volumetric clouds | `lib/volumetric_clouds.glsl`, `lib/volumetric_clouds_vertex.glsl`, deferred wrappers | Static volumetric mode; 7 average steps | Enabled; visual/performance validation pending |
+| Volumetric clouds | `lib/volumetric_clouds.glsl`, `lib/volumetric_clouds_vertex.glsl`, deferred wrappers | Static volumetric mode; 7 average steps; exact early exit once accumulated opacity reaches the final clamp threshold | Enabled; visual/performance validation pending |
 | Cloud reflections | Cloud code plus `lib/water.glsl` reflection path | Keep enabled; SSR/cloud reflection sampling remains bounded | Enabled; water-scene validation pending |
-| End clouds | `lib/volumetric_clouds_end.glsl`, End dimension wrappers | Shared reduced cloud budget | Enabled; End runtime validation pending |
-| Screen-space reflections | `lib/water.glsl`, `REFLECTION_SLIDER=2`, `RAYMARCH_STEPS` | 5 raymarch steps | Enabled; artifact/ghosting validation pending |
+| End clouds | `lib/volumetric_clouds_end.glsl`, End dimension wrappers | Shared reduced cloud budget; early exit after opacity saturation | Enabled; End runtime validation pending |
+| Screen-space reflections | `lib/water.glsl`, `REFLECTION_SLIDER=2`, `RAYMARCH_STEPS` | 5 raymarch steps; return immediately when the ray exits screen bounds, preserving the existing fallback result | Enabled; artifact/ghosting validation pending |
 | Refraction | `lib/water.glsl`, water G-buffer path | Reuse existing water normal/depth data; bounded offsets | Enabled; water validation pending |
 | Sun/moon reflections | `lib/water.glsl`, `SUN_REFLECTION` | Existing analytic/directional path | Enabled; visual validation pending |
 | Enhanced AO | `lib/ao.glsl`, deferred fragment path | 4 AO steps | Enabled; halo/quality validation pending |
