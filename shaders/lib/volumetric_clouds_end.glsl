@@ -81,6 +81,11 @@ vec3 get_end_cloud(vec3 eyeDirection, vec3 blockColor, float bright, float dithe
                 }
             }
 
+            // The final opacity is clamped to 1.0; later samples cannot change it.
+            if (cloud_value >= opacity_dist) {
+                break;
+            }
+
             intersection_pos += increment;
         }
 
