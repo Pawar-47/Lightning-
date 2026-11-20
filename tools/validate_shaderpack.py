@@ -122,7 +122,7 @@ required_performance_tokens = [
     "REFLECTION_SLIDER=2", "REFRACTION=1", "SUN_REFLECTION=1",
     "AO=1", "AA_TYPE=2", "V_CLOUDS=1", "VOL_LIGHT=1",
 ]
-performance_tokens = set(performance_profile.split())
+performance_tokens = set(performance_profile.split('=', 1)[1].split())
 for token in required_performance_tokens:
     if token not in performance_tokens:
         fail(f"Performance profile has dropped a required rendering feature: {token}")
