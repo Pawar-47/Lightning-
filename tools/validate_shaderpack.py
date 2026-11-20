@@ -2,7 +2,6 @@
 """Static structure validator for Lightning. This does not compile GLSL."""
 from pathlib import Path
 import csv
-import hashlib
 import json
 import re
 import sys

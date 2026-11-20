@@ -26,7 +26,7 @@ For the 210 shader stages, apply only the documented first-line version replacem
 
 `destination_path + NUL + destination_git_blob_sha1 + newline`
 
-The same aggregate was independently computed from the uploaded ZIP's expected destination bytes and the live `main` tree. Each pair matches.
+The same aggregate was computed from the uploaded ZIP's expected destination bytes and the live `main` tree. Each pair matches. Reproduce the per-file comparison locally with `python tools/verify_source_port.py /path/to/Shader.zip` from a Lightning checkout.
 
 | Destination family | Files | Verified aggregate SHA-1 |
 |---|---:|---|
@@ -45,7 +45,7 @@ The same aggregate was independently computed from the uploaded ZIP's expected d
 
 ## The two intentional exceptions
 
-The original archive versions are identified by their Git blob hashes in the source ledger and those expected hashes are checked by CI:
+The original archive versions are identified by their Git blob hashes in the source ledger and the validator checks that the expected hashes are recorded in the source ledger:
 
 - `shaders/lib/config.glsl`: `7c8f086dfa749f2c61707782786897620a3564d5`
 - `shaders/shaders.properties`: `712ebede6b2ad78a92ee6cb39bf1f5fb07bdfdb1`

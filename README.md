@@ -58,6 +58,8 @@ The packaged ZIP is written under `build/releases/`. GitHub Actions runs static 
 - FPS/frame-time benchmark on the target laptop: not yet verified.
 - No finished release has been published yet.
 
+For a reproducible uploaded-ZIP source comparison, run `python tools/verify_source_port.py /path/to/Shader.zip` from a local checkout.
+
 See:
 - [Porting status](docs/PORTING_STATUS.md)
 - [Feature preservation map](docs/FEATURE_PRESERVATION_MAP.md)
