@@ -2,6 +2,7 @@
 """Static structure validator for Lightning. This does not compile GLSL."""
 from pathlib import Path
 import csv
+import json
 import re
 import sys
 
@@ -57,6 +58,35 @@ for relative in required:
     if not (SHADERS / relative).is_file():
         fail(f"required feature source missing: shaders/{relative}")
 
+
+
+language_files = [
+    "en_US.lang", "es_AR.lang", "es_ES.lang", "es_MX.lang",
+    "ko_KR.lang", "ru_RU.lang", "sv_SE.lang", "tr_TR.lang", "zh_CN.lang",
+]
+for name in language_files:
+    if not (SHADERS / "lang" / name).is_file():
+        fail(f"reference shader language file missing: shaders/lang/{name}")
+
+texture_files = [
+    "clouds_blocky_512_R_8bit.png",
+    "clouds_blocky_512_R_8bit.png.mcmeta",
+    "clouds_natural_512_R_8bit.png",
+    "clouds_natural_512_R_8bit.png.mcmeta",
+    "water_256_RG_8bit.png",
+    "water_256_RG_8bit.png.mcmeta",
+]
+for name in texture_files:
+    path = SHADERS / "textures" / name
+    if not path.is_file():
+        fail(f"reference texture/animation metadata missing: shaders/textures/{name}")
+    if name.endswith(".png") and path.read_bytes()[:8] != b"\\x89PNG\\r\\n\\x1a\\n":
+        fail(f"invalid PNG signature: shaders/textures/{name}")
+    if name.endswith(".mcmeta"):
+        try:
+            json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as error:
+            fail(f"invalid animation metadata {name}: {error}")
 
 config_text = (SHADERS / "lib/config.glsl").read_text(encoding="utf-8", errors="replace")
 properties_text = (ROOT / "shaders.properties").read_text(encoding="utf-8", errors="replace")
