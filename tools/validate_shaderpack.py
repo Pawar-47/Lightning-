@@ -107,6 +107,16 @@ for option in ["profile.Performance=", "profile.Quality=", "screen.ADVANCED_SCRE
     if option not in properties_text:
         fail(f"shader options/profile configuration missing: {option}")
 
+performance_profile = next((line for line in properties_text.splitlines() if line.startswith("profile.Performance=")), "")
+quality_profile = next((line for line in properties_text.splitlines() if line.startswith("profile.Quality=")), "")
+if "VOL_LIGHT=1" not in performance_profile:
+    fail("Performance profile must retain the cheaper depth-based godray path (VOL_LIGHT=1)")
+if "VOL_LIGHT=2" not in quality_profile:
+    fail("Quality profile must retain the full shadow-aware volumetric-light path (VOL_LIGHT=2)")
+for token in ["AOSTEPS=4", "CLOUD_STEPS_AVG=7", "MOTION_BLUR_SAMPLES=3", "BLOOM_SAMPLES=2.0"]:
+    if token not in performance_profile:
+        fail(f"Performance profile is missing its bounded feature budget: {token}")
+
 def numeric_define(name: str):
     match = re.search(rf"^\s*#\s*define\s+{re.escape(name)}\s+(\d+(?:\.\d+)?)", config_text, re.MULTILINE)
     return float(match.group(1)) if match else None

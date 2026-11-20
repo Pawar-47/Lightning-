@@ -30,7 +30,7 @@ The current pack includes **Performance** and **Quality** profiles. Performance 
 - Screen-space reflections, water refraction and sun/moon reflections
 - Enhanced ambient occlusion
 - Temporal antialiasing (with TAA+FXAA available in Quality)
-- Bloom and volumetric lighting
+- Bloom and depth-based godrays in Performance; full shadow-aware volumetric lighting in Quality
 - Material gloss, depth of field and motion blur
 
 The Performance profile uses reduced budgets (AO 4 steps, SSR 5 steps, volumetric clouds 7 samples, godrays 4 steps, bloom 2 sample pairs and motion blur 3 samples). These are code/profile settings to test—not a promise of a particular FPS or unchanged visual quality.
