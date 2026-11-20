@@ -80,7 +80,7 @@ for name in texture_files:
     path = SHADERS / "textures" / name
     if not path.is_file():
         fail(f"reference texture/animation metadata missing: shaders/textures/{name}")
-    if name.endswith(".png") and path.read_bytes()[:8] != b"\\x89PNG\\r\\n\\x1a\\n":
+    if name.endswith(".png") and path.read_bytes()[:8] != bytes.fromhex("89504e470d0a1a0a"):
         fail(f"invalid PNG signature: shaders/textures/{name}")
     if name.endswith(".mcmeta"):
         try:
