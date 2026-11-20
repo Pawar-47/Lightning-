@@ -21,6 +21,8 @@ jobs:
           python-version: "3.12"
       - name: Validate shader source structure
         run: python tools/validate_shaderpack.py
+      - name: Syntax-check uploaded-source audit tool
+        run: python -m py_compile tools/verify_source_port.py
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
