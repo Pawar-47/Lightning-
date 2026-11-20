@@ -50,15 +50,15 @@ Javier Garduño - GNU Lesser General Public License v3.0
 #define WAVING 1 // [0 1] Makes objects like leaves or grass move in the wind
 #define TINTED_WATER 1  // [0 1] Use the resource pack color for water.
 #define REFRACTION 1  // [0 1] Activate refractions.
-// #define DOF // Enables depth of field (high performance cost).
+#define DOF // Enables depth of field (high performance cost).
 #define DOF_STRENGTH 0.09  // [0.06 0.07 0.08 0.09 0.10 0.11 0.12 0.13]  Depth of field strength.
 #define AO 1  // [0 1] Turn on for enhanced ambient occlusion (medium performance cost).
-#define AOSTEPS 5 // [2 3 4 5 6 7 8 9 10 11] How many samples are taken for AO (high performance cost).
+#define AOSTEPS 4 // [2 3 4 5 6 7 8 9 10 11] How many samples are taken for AO (high performance cost).
 #define AO_STRENGTH 0.70 // [0.20 0.25 0.30 0.35 0.40 0.45 0.50 0.55 0.60 0.66 0.70 0.75 0.80 0.85] Ambient occlusion strength (strength NOT affect performance).
 #define AA_TYPE 2 // [0 1 2 3]  No: Disable antialiasing (not recommended). Denoise only: Supersampling is only used to eliminate noise. TAA: Enable antialiasing. TAA+: Use FXAA to improve the result of TAA. It does not apply if chromatic aberration or DoF is being used.
-//#define MOTION_BLUR // Turn on motion blur
+#define MOTION_BLUR // Turn on motion blur
 #define MOTION_BLUR_STRENGTH 1.0 // [0.5 1.0 1.5 2.0 2.5 3.0 3.5 4.0] Set Motion blur strength. Lower framerate -> Lower strength and vice versa is recommended.
-#define MOTION_BLUR_SAMPLES 4 // [3 4 5 6 7 8] Motion blur samples
+#define MOTION_BLUR_SAMPLES 3 // [3 4 5 6 7 8] Motion blur samples
 #define SUN_REFLECTION 1 // [0 1] Enable sun (or moon) reflection on water and glass
 
 #define SHADOW_TYPE 1 // [0 1] Sets the shadow type
@@ -75,7 +75,7 @@ Javier Garduño - GNU Lesser General Public License v3.0
 #define END_CLOUDS // Activates drawing of clouds in the end (only works if volumetric clouds are active)
 #define BLACK_ENTITY_FIX 0 // [0 1] Removes black entity bug in old video drivers (activate ONLY if you have problems with black entities)
 #define BLOOM // Enable or disable bloom effect
-#define BLOOM_SAMPLES 3.0 // [2.0 3.0 4.0 5.0 6.0 7.0 8.0 9.0 10.0] Bloom sample pairs.
+#define BLOOM_SAMPLES 2.0 // [2.0 3.0 4.0 5.0 6.0 7.0 8.0 9.0 10.0] Bloom sample pairs.
 #define CHROMA_ABER 0 // [0 1] Enable chroma aberration.
 #define CHROMA_ABER_STRENGTH 0.04 // [0.04 0.05 0.06] Chroma aberration strength.
 #define VOL_LIGHT 1 // [0 1 2] Depth based: Turn on depth based godrays, faster and can work better than volumetric light for very short shadow distances. Volumetric: It activates the volumetric light, more accurate and faster, but it needs the shadows enabled to work.
@@ -148,7 +148,7 @@ Javier Garduño - GNU Lesser General Public License v3.0
 #endif
 
 // Reflection parameters
-#define RAYMARCH_STEPS 10
+#define RAYMARCH_STEPS 5
 
 // Cloud parameters
 #if CLOUD_VOL_STYLE == 1
@@ -161,7 +161,7 @@ Javier Garduño - GNU Lesser General Public License v3.0
     #define CLOUD_PLANE 319.0
 #endif
 
-#define CLOUD_STEPS_AVG 10 // [7 8 9 10 11 12 13 14 15 16] Samples per pixel (high performance impact).
+#define CLOUD_STEPS_AVG 7 // [7 8 9 10 11 12 13 14 15 16] Samples per pixel (high performance impact).
 #define CLOUD_SPEED 0 // [0 1 2] Change the speed of clouds for demo purposes.
 
 #if CLOUD_VOL_STYLE == 1
@@ -189,7 +189,7 @@ Javier Garduño - GNU Lesser General Public License v3.0
 #endif
 
 // Godrays
-#define GODRAY_STEPS 6
+#define GODRAY_STEPS 4
 #define CHEAP_GODRAY_SAMPLES 4
 
 // Color blindness
@@ -199,8 +199,8 @@ Javier Garduño - GNU Lesser General Public License v3.0
 // Sun rotation angle
 const float sunPathRotation = -25.0; // [-40.0 -35.0 -30.0 -25.0 -20.0 -15.0 -10.0 -5.0 0.0 5.0 10.0 15.0 20.0 25.0 30.0 35.0 40.0]
 
-#define SHADOW_DISTANCE_SLIDER 1 // [0 1 2]
-#define SHADOW_QTY_SLIDER 2 // [1 2 3]
+#define SHADOW_DISTANCE_SLIDER 0 // [0 1 2]
+#define SHADOW_QTY_SLIDER 1 // [1 2 3]
 #define SHADOW_LOCK 0 // [0 16 32 64 128 256]
 
 #define SHADOW_CASTING // Enable or disable shadows. Configure quality in advanced options.
