@@ -61,14 +61,14 @@ for relative in required:
 config_text = (SHADERS / "lib/config.glsl").read_text(encoding="utf-8", errors="replace")
 properties_text = (ROOT / "shaders.properties").read_text(encoding="utf-8", errors="replace")
 required_defines = [
-    r"^\\s*#\\s*define\\s+DOF\\b",
-    r"^\\s*#\\s*define\\s+MOTION_BLUR\\b",
-    r"^\\s*#\\s*define\\s+COLORED_SHADOW\\b",
-    r"^\\s*#\\s*define\\s+CLOUD_REFLECTION\\b",
-    r"^\\s*#\\s*define\\s+END_CLOUDS\\b",
-    r"^\\s*#\\s*define\\s+BLOOM\\b",
-    r"^\\s*#\\s*define\\s+MATERIAL_GLOSS\\b",
-    r"^\\s*#\\s*define\\s+SHADOW_CASTING\\b",
+    r"^\s*#\s*define\s+DOF\b",
+    r"^\s*#\s*define\s+MOTION_BLUR\b",
+    r"^\s*#\s*define\s+COLORED_SHADOW\b",
+    r"^\s*#\s*define\s+CLOUD_REFLECTION\b",
+    r"^\s*#\s*define\s+END_CLOUDS\b",
+    r"^\s*#\s*define\s+BLOOM\b",
+    r"^\s*#\s*define\s+MATERIAL_GLOSS\b",
+    r"^\s*#\s*define\s+SHADOW_CASTING\b",
 ]
 for pattern in required_defines:
     if not re.search(pattern, config_text, re.MULTILINE):
@@ -78,7 +78,7 @@ for option in ["profile.Performance=", "profile.Quality=", "screen.ADVANCED_SCRE
         fail(f"shader options/profile configuration missing: {option}")
 
 def numeric_define(name: str):
-    match = re.search(rf"^\\s*#\\s*define\\s+{re.escape(name)}\\s+(\\d+(?:\\.\\d+)?)", config_text, re.MULTILINE)
+    match = re.search(rf"^\s*#\s*define\s+{re.escape(name)}\s+(\d+(?:\.\d+)?)", config_text, re.MULTILINE)
     return float(match.group(1)) if match else None
 
 budgets = {"AOSTEPS": 4, "RAYMARCH_STEPS": 5, "CLOUD_STEPS_AVG": 7, "GODRAY_STEPS": 4, "MOTION_BLUR_SAMPLES": 3, "BLOOM_SAMPLES": 2}
