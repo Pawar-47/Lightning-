@@ -1,33 +1,70 @@
 # Lightning
 
-A Minecraft shader pack project tailored for Intel HD Graphics 5500 and the Intel Core i3-5005U class of low-power hardware.
+A feature-preserving Minecraft shaderpack project tuned for Intel HD Graphics 5500 and low-power Intel Core i3 hardware.
 
-## Project status
+## Project roots
 
-This repository is the dedicated, independent development home for Lightning. It is being built from two authorized roots:
+Lightning is a separate project built from these two authorized roots:
 
-- The user-supplied MakeUp Ultra Fast v9.6 shader archive, used as the feature and source-reference baseline.
-- `ascpixi/minecraft-shader-template`, used as the development and build foundation.
+1. The user-supplied MakeUp Ultra Fast v9.6 archive, used as the rendering-feature and source-reference baseline.
+2. [ascpixi/minecraft-shader-template](https://github.com/ascpixi/minecraft-shader-template), used as the Gradle, Iris development-client and packaging foundation.
 
-No Aetheris-Shaders files or commits are used as a project base.
+No Aetheris-Shaders files, commits, branches or releases are used as Lightning's foundation.
 
-## Design goals
+## Target machine
 
-- Preserve the reference pack's major rendering features, including dynamic and coloured shadows, volumetric clouds, cloud reflections, End clouds, screen-space reflections, refraction, sun/moon reflections, enhanced ambient occlusion, anti-aliasing, bloom, volumetric light, material gloss, depth of field, and motion blur.
-- Provide a feature-preserving Performance profile for Intel HD 5500 rather than gaining FPS by silently deleting effects or pipeline passes.
-- Keep effects configurable and use lower-cost algorithms, reduced sample counts, sensible render distances, and appropriately scaled intermediate buffers where compatible with Iris.
-- Validate source coverage, GLSL compilation, Iris runtime loading, visual output, and real-device performance separately. No unmeasured FPS or visual-quality claims are made.
+- Intel Core i3-5005U, 2 cores / 4 threads, 2.00 GHz
+- Intel HD Graphics 5500 (OpenGL 4.3)
+- 8 GB RAM
+- Linux Mint
+- Minecraft Java with Iris and Sodium
 
-## Hardware target
+The development template currently pins Minecraft 1.21.5, Iris 1.8.11 and Sodium 0.6.12. Confirm the user's installed game profile before treating those as the final supported versions.
 
-Primary target: Intel Core i3-5005U, Intel HD Graphics 5500 (OpenGL 4.3), 8 GB RAM, Linux Mint, Minecraft Java with Iris and Sodium.
+## Feature-preserving profiles
 
-The exact Minecraft/Iris/Sodium versions will be pinned after compatibility verification against the target installation.
+The current pack includes **Performance** and **Quality** profiles. Performance reduces shadow distance/resolution and sample budgets while keeping the major rendering features enabled in the shader code:
+
+- Dynamic and coloured shadows
+- Volumetric clouds, cloud reflections and End clouds
+- Screen-space reflections, water refraction and sun/moon reflections
+- Enhanced ambient occlusion
+- Temporal antialiasing (with TAA+FXAA available in Quality)
+- Bloom and volumetric lighting
+- Material gloss, depth of field and motion blur
+
+The Performance profile uses reduced budgets (AO 4 steps, SSR 5 steps, volumetric clouds 7 samples, godrays 4 steps, bloom 2 sample pairs and motion blur 3 samples). These are code/profile settings to test—not a promise of a particular FPS or unchanged visual quality.
+
+## Build and development
+
+```bash
+# Build a distributable shaderpack ZIP
+./gradlew --no-daemon zipShaderpack
+
+# Launch the Iris development client with the shaderpack staged
+./gradlew runShaderClient
+```
+
+The packaged ZIP is written under `build/releases/`. GitHub Actions runs static source checks and builds the ZIP on pushes and pull requests.
+
+## Validation status
+
+- Static shader include/version checks: passing in CI.
+- Feature macro/profile and performance-budget checks: passing in CI.
+- Reference language and texture asset checks: added to CI; latest run pending.
+- Gradle shaderpack ZIP packaging: passing in CI.
+- GLSL stage compile/link: not yet verified.
+- Iris runtime loading and visual comparison: not yet verified.
+- FPS/frame-time benchmark on the target laptop: not yet verified.
+- No finished release has been published yet.
+
+See:
+- [Porting status](docs/PORTING_STATUS.md)
+- [Feature preservation map](docs/FEATURE_PRESERVATION_MAP.md)
+- [Performance design](docs/PERFORMANCE_DESIGN.md)
+- [Third-party notices and attribution](THIRD_PARTY_NOTICES.md)
+- [Source file ledger](reference/source-file-map.csv)
 
 ## Licensing and attribution
 
-The reference shader identifies itself as MakeUp Ultra Fast v9.6 by Javier Garduño (KDXavier), with LGPL-3.0 source headers. Preserve upstream copyright notices and the full applicable license when porting or redistributing its code. See `THIRD_PARTY_NOTICES.md` and the source attribution in the ported files.
-
-## Current status
-
-Initial repository bootstrap. The complete source inventory, file-by-file port map, compatibility work, and feature reactivation are tracked in project documentation as implementation proceeds.
+The reference source identifies MakeUp Ultra Fast v9.6 by Javier Garduño (KDXavier) and carries LGPL-3.0 source headers. The applicable full license is included in `LICENSES/LGPL-3.0.txt`. Preserve upstream copyright and license notices in derivative files and include the corresponding source when distributing covered code. See `THIRD_PARTY_NOTICES.md`.
