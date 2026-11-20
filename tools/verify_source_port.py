@@ -123,6 +123,14 @@ def main() -> None:
     if len(rows) != 348:
         fail(f"expected 348 ledger rows, found {len(rows)}")
 
+    optimized_rows = {
+        row.get("source_path")
+        for row in rows
+        if row.get("zip_comparison") == "ZIP_OPTIMIZED_PATCH"
+    }
+    if optimized_rows != set(OPTIMIZATION_PATCHES):
+        fail(f"optimization patch ledger mismatch: {sorted(optimized_rows)}")
+
     try:
         with zipfile.ZipFile(args.archive) as archive:
             archive_files = {
