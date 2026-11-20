@@ -88,11 +88,6 @@ APP_BASE_NAME=${0##*/}
 # Discard cd standard output in case $CDPATH is set (https://github.com/gradle/gradle/issues/25036)
 APP_HOME=$( cd -P "${APP_HOME:-./}" > /dev/null && printf '%s\n' "$PWD" ) || exit
 
-if [ -z "$GRADLE_USER_HOME" ] ; then
-    GRADLE_USER_HOME="$APP_HOME/.gradle-user"
-fi
-export GRADLE_USER_HOME
-
 # Use the maximum available, or set MAX_FD != -1 to use that value.
 MAX_FD=maximum
 
@@ -254,4 +249,3 @@ eval "set -- $(
     )" '"$@"'
 
 exec "$JAVACMD" "$@"
-
