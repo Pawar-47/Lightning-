@@ -166,7 +166,7 @@ try:
             fail("uploaded-archive exception snapshot has unexpected entries")
         for path, expected_blob in expected_exception_blobs.items():
             data = archive.read(path)
-            header = f"blob {len(data)}\\0".encode("ascii")
+            header = b"blob " + str(len(data)).encode("ascii") + bytes([0])
             actual_blob = hashlib.sha1(header + data).hexdigest()
             if actual_blob != expected_blob:
                 fail(f"uploaded source exception hash mismatch: {path}")
