@@ -14,7 +14,7 @@ Reference: the user-uploaded MakeUp Ultra Fast v9.6 `Shader.zip`
   - `shaders/lib/config.glsl`
   - `shaders/shaders.properties`
 
-The exact two source exceptions are preserved in [`uploaded-archive-exceptions.zip`](../reference/uploaded-archive-exceptions.zip). That archive contains only those two original files; it is not included in the distributable shaderpack.
+The exact original Git blob hashes for the two source exceptions are recorded in the final column of `reference/source-file-map.csv`. The original uploaded ZIP remains the source authority; these two active files are intentionally customized/merged rather than represented as byte-identical copies.
 
 ## Verification method
 
@@ -45,7 +45,7 @@ The same aggregate was independently computed from the uploaded ZIP's expected d
 
 ## The two intentional exceptions
 
-The original archive versions are retained in the exception ZIP and their Git blob hashes are checked by CI:
+The original archive versions are identified by their Git blob hashes in the source ledger and those expected hashes are checked by CI:
 
 - `shaders/lib/config.glsl`: `7c8f086dfa749f2c61707782786897620a3564d5`
 - `shaders/shaders.properties`: `712ebede6b2ad78a92ee6cb39bf1f5fb07bdfdb1`
