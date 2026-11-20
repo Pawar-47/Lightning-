@@ -58,9 +58,9 @@ Do not overwrite these archive-specific variants with current upstream versions 
 
 ### CI evidence
 
-- Workflow run `44808050870` passed static validation and Gradle shaderpack packaging.
-- Run `44808317936` passed the static validator and completed the `zipShaderpack` build and artifact upload; GitHub was still finalizing post-job cleanup when last checked.
-- Run `44808367005` was still in progress at the last check.
+- Workflow run `44810089010` passed the static validator, checked all language/texture assets and built the shaderpack through the checked-in `./gradlew` wrapper.
+- It uploaded the `Lightning-shaderpack` artifact (374,358 bytes; SHA-256 `0b45cfa30aa7b6c7e923b7080cf37e11d8d9d57b7042a24fba52b94ee8840686`).
+- Later commits update only documentation/ledger records; their CI runs are in progress or queued at this checkpoint.
 - These are structure/package checks, not GLSL stage compilation, Iris runtime loading, visual equivalence or hardware performance benchmarks.
 
 ## Known gaps — do not mark complete
