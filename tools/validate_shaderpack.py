@@ -152,8 +152,16 @@ if map_path.is_file():
     if len(set(paths)) != len(paths) or any(not p for p in paths):
         fail("source-file ledger contains blank or duplicate source paths")
     verified_rows = [row for row in rows if row.get("zip_comparison") == "ZIP_GIT_BLOB_HASH_MATCH"]
-    if len(verified_rows) != 346:
-        fail(f"expected 346 verified source-to-port rows, found {len(verified_rows)}")
+    if len(verified_rows) != 343:
+        fail(f"expected 343 exact/version-only source-to-port rows, found {len(verified_rows)}")
+    optimized_rows = {row.get("source_path") for row in rows if row.get("zip_comparison") == "ZIP_OPTIMIZED_PATCH"}
+    expected_optimized_rows = {
+        "shaders/lib/water.glsl",
+        "shaders/lib/volumetric_clouds.glsl",
+        "shaders/lib/volumetric_clouds_end.glsl",
+    }
+    if optimized_rows != expected_optimized_rows:
+        fail(f"deterministic optimization patch ledger mismatch: {sorted(optimized_rows)}")
     exceptions = {row.get("source_path"): row for row in rows if row.get("source_path") in {
         "shaders/lib/config.glsl", "shaders/shaders.properties"
     }}
