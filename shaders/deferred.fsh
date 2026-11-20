@@ -1,12 +1,17 @@
 #version 330 compatibility
+#extension GL_ARB_shader_texture_lod : enable
+/* MakeUp - deferred.fsh
+Render: Ambient occlusion, volumetric clouds
 
-uniform sampler2D colortex0;
+Javier Garduño - GNU Lesser General Public License v3.0
+*/
 
-in vec2 texcoord;
+#define USE_BASIC_SH // Sets the use of a "basic" or "generic" shader for custom dimensions, instead of the default overworld shader. This can solve some rendering issues as the shader is closer to vanilla rendering.
 
-/* RENDERTARGETS: 0 */
-layout(location = 0) out vec4 color;
+#ifdef USE_BASIC_SH
+    #define UNKNOWN_DIM
+#endif
+#define DEFERRED_SHADER
+#define NO_SHADOWS
 
-void main() {
-	color = texture(colortex0, texcoord);
-}
+#include "/common/deferred_fragment.glsl"
