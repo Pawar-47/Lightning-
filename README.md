@@ -35,6 +35,8 @@ The current pack includes **Performance** and **Quality** profiles. Performance 
 
 The Performance profile uses reduced budgets (AO 4 steps, SSR 5 steps, volumetric clouds 7 samples, godrays 4 steps, bloom 2 sample pairs and motion blur 3 samples). These are code/profile settings to test—not a promise of a particular FPS or unchanged visual quality.
 
+The shader code also uses bounded early exits for out-of-screen SSR rays and opacity-saturated Overworld/End cloud rays; these preserve the existing fallback/clamped results while avoiding unnecessary loop work.
+
 ## Build and development
 
 ```bash
