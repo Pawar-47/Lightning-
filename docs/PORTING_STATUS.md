@@ -11,11 +11,9 @@ Last updated: 2026-11-21
 
 ## Uploaded archive inventory
 
-The uploaded archive contains 348 actual files (742,051 uncompressed bytes) after excluding macOS `__MACOSX` metadata. The complete local inventory and SHA-256 manifest were generated before repository bootstrap.
+The uploaded archive contains 348 actual files (742,051 uncompressed bytes) after excluding macOS `__MACOSX` metadata.
 
-Source families:
-
-| Family | Files |
+| Source family | Files |
 |---|---:|
 | `shaders/common/` | 41 |
 | `shaders/lib/` | 38 |
@@ -23,65 +21,46 @@ Source families:
 | `shaders/world0/` | 58 |
 | `shaders/world-1/` | 55 |
 | `shaders/world1/` | 57 |
-| Root docs, wrappers, properties, language files, textures and metadata | Remaining files |
-
-The archive-specific `shaders/lib/config.glsl` and `shaders/shaders.properties` differ from the current upstream GitHub branch. Their uploaded-archive SHA-1 values are respectively:
-
-- `config.glsl`: `7c8f086dfa749f2c61707782786897620a3564d5`
-- `shaders.properties`: `712ebede6b2ad78a92ee6cb39bf1f5fb07bdfdb1`
-
-Do not overwrite these archive-specific variants with current upstream versions and then describe them as byte-identical to the ZIP.
+| Other root, language, texture and metadata files | 115 |
 
 ## Current implementation checkpoint
 
-### Present and checked
+- Template Gradle build foundation imported; project identity changed to Lightning (`dev.pawar47.lightning`, `0.1.0-alpha.1`).
+- **Source-to-port comparison: 346/348 files verified.** The 136 unchanged files are byte-identical to the uploaded ZIP. All 210 `.fsh/.vsh` entrypoints are verified against the uploaded ZIP after only the `#version 120` → `#version 330 compatibility` migration.
+- The 100 shared modules comprise 41 `common/`, 37 non-config `lib/`, and 22 `src/` files. Their uploaded-ZIP Git blob hashes match their active repository destinations.
+- All 17 previously unverified metadata/Voxy files now have exact uploaded-ZIP hash matches.
+- All 19 documentation, language and texture assets have exact uploaded-ZIP hash matches.
+- The two archive-specific exceptions (`shaders/lib/config.glsl` and `shaders/shaders.properties`) are preserved byte-for-byte in `reference/uploaded-archive-exceptions.zip`; CI verifies the ZIP SHA-256 and both original Git blob hashes. The active config is feature-restored and tuned; the active root properties file merges the original UI with Lightning profiles.
+- The source `shaders/shaders.properties` is intentionally relocated/merged into the pack-root `shaders.properties`.
+- All 210 entrypoints declare GLSL 330. Shared shader modules retain their source contents.
+- Full MakeUp settings UI and original option screens are present. Lightning adds `Performance` and `Quality` profiles.
+- Performance profile retains the major effects. It uses bounded budgets and the cheaper depth-based godray path (`VOL_LIGHT=1`); Quality retains the full shadow-aware volumetric-light path (`VOL_LIGHT=2`).
+- Added `tools/validate_shaderpack.py` and `.github/workflows/shaderpack-validation.yml`.
 
-- Template Gradle build foundation imported.
-- Gradle project identity changed to Lightning:
-  - archive name: `Lightning`
-  - group: `dev.pawar47.lightning`
-  - version: `0.1.0-alpha.1`
-- MakeUp source modules currently present at active shader paths:
-  - `shaders/common/`: 41 files; Git blob hashes match upstream MakeUp tree.
-  - `shaders/lib/`: 38 files; Git blob hashes match upstream MakeUp tree.
-  - `shaders/src/`: 22 files; Git blob hashes match upstream MakeUp tree.
-- One common module (`solid_blocks_fragment.glsl`) was also hash-checked directly against the uploaded ZIP and matched.
-- All 9 `shaders/lang/*.lang` files and all 3 PNG textures plus their 3 `.mcmeta` animation files are now present; their Git blob hashes match the uploaded ZIP exactly.
-- All 210 vertex/fragment entrypoints now declare `#version 330`; sampled root, Overworld, Nether and End wrappers retain the source structure with the GLSL compatibility-version migration. A complete per-wrapper text diff is still pending.
-- The source tree contains 344 files under `shaders/`; 343 now exist at their active destination paths. The source `shaders/shaders.properties` is intentionally relocated/merged into the pack-root `shaders.properties`.
-- Root and dimension-specific wrapper samples were checked against upstream. Their main migration is `#version 120` to `#version 330 compatibility`; the shared source includes remain unchanged.
-- Upstream developer documentation, README, helpful notes and upstream shader properties are retained under `reference/makeup-ultra-fast-upstream/` where imported. This is not yet a complete byte-for-byte mirror of the uploaded archive.
-- Full MakeUp settings UI and original option screens have been restored into the pack-root `shaders.properties`; added Lightning `Performance` and `Quality` profiles.
-- Performance budgets currently set in `shaders/lib/config.glsl`: AO 4 steps, motion blur 3 samples, SSR 5 steps, volumetric clouds 7 samples, godrays 4 steps, bloom 2 samples, shorter shadow distance and lower shadow-map quality tier. DOF and motion blur are enabled. Major effects are not removed from the code.
-- Added `tools/validate_shaderpack.py` to check shader-stage version declarations, include resolution and required feature-module presence.
-- Added GitHub Actions workflow `.github/workflows/shaderpack-validation.yml`.
+See [`SOURCE_PORT_VERIFICATION.md`](SOURCE_PORT_VERIFICATION.md) for the per-family aggregate hashes and method.
 
-### CI evidence
+## CI evidence
 
-- Workflow run `44810089010` passed the static validator, checked all language/texture assets and built the shaderpack through the checked-in `./gradlew` wrapper.
-- It uploaded the `Lightning-shaderpack` artifact (374,358 bytes; SHA-256 `0b45cfa30aa7b6c7e923b7080cf37e11d8d9d57b7042a24fba52b94ee8840686`).
-- Later commits update only documentation/ledger records; their CI runs are in progress or queued at this checkpoint.
-- These are structure/package checks, not GLSL stage compilation, Iris runtime loading, visual equivalence or hardware performance benchmarks.
+- Latest verified run: [44812946032](https://github.com/Pawar-47/Lightning-/actions/runs/44812946032) — all steps passed.
+- The run passed shader structure validation, source asset checks, Java/Gradle setup, `./gradlew --no-daemon zipShaderpack`, and artifact upload.
+- Uploaded `Lightning-shaderpack` artifact size: 374,357 bytes.
+- The CI result proves static checks and ZIP packaging only; it is not a GLSL stage compile, Iris runtime test, visual comparison or target-hardware benchmark.
 
 ## Known gaps — do not mark complete
 
-1. Exact byte-for-byte comparison of all 348 uploaded ZIP files against repository files is incomplete.
-2. The source archive's config and properties variants still need exact recovery/porting; current active config originated from upstream and was then tuned, not copied byte-for-byte from the ZIP.
-3. All dimension-specific wrappers and root shader entrypoints need a full automated source-to-port comparison, not just spot checks.
-4. The template's standard `gradle-wrapper.jar` has not been imported. CI uses Gradle 8.12.1 directly; the checked-in `gradlew` scripts therefore need a wrapper-JAR fix before claiming local wrapper execution works.
-5. No complete Iris/OptiFine shader-stage compile matrix has run.
-6. No Minecraft + Iris + Sodium client runtime load test has run.
-7. No visual comparison across Overworld, Nether, End, water, clouds, shadows and post-processing has run.
-8. No FPS/frame-time benchmark has run on the user's Intel Core i3-5005U / Intel HD 5500 / 8 GB Linux Mint machine.
-9. No release has been created. Do not release the current CI ZIP as a finished shaderpack.
+1. Complete semantic/line-by-line review of the two preserved source exceptions against the active tuned config and merged properties file.
+2. No full GLSL stage compile/link matrix has run.
+3. No Minecraft + Iris + Sodium runtime shader-load test has run.
+4. No visual comparison across Overworld, Nether, End, water, clouds, shadows and post-processing has run.
+5. No FPS/frame-time benchmark has run on the Intel Core i3-5005U / Intel HD 5500 / 8 GB Linux Mint target laptop.
+6. The installed Minecraft/Iris/Sodium versions have not yet been confirmed; template defaults are provisional.
+7. No release has been created. Do not present the current CI ZIP as a finished, hardware-validated release.
 
 ## Next work order
 
-1. Complete exact archive-to-repository per-file checksums and disposition records.
-2. Recover the archive-specific config/properties and integrate the Performance profile without losing option screens, textures, dimension rules or pipeline passes.
-3. Finish root and dimension wrapper port checks, then audit all buffer/pass dependencies.
-4. Finish exact ZIP comparison for the 210 wrapper stages and all remaining root/property files; preserve the archive-specific config/properties differences.
-5. Add actual GLSL compile/link validation using the same Iris preprocessing path as the template.
-6. Run Iris runtime loading and dimension/feature smoke tests.
-7. Compare visual output and tune performance budgets.
-8. Benchmark on the target laptop; only then prepare a release.
+1. Complete the semantic diff/reconciliation of the two preserved archive exceptions.
+2. Add real GLSL compilation using Iris-compatible preprocessing, not only static include checks.
+3. Run Iris runtime loading and dimension/feature smoke tests.
+4. Compare visual output and tune performance budgets without silently removing major effects.
+5. Benchmark frame times on the target laptop.
+6. Prepare a release only after the above checks pass.

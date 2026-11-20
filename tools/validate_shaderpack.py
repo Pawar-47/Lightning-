@@ -2,9 +2,11 @@
 """Static structure validator for Lightning. This does not compile GLSL."""
 from pathlib import Path
 import csv
+import hashlib
 import json
 import re
 import sys
+import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 SHADERS = ROOT / "shaders"
@@ -136,8 +138,43 @@ if map_path.is_file():
     paths = [row.get("source_path", "") for row in rows]
     if len(set(paths)) != len(paths) or any(not p for p in paths):
         fail("source-file ledger contains blank or duplicate source paths")
+    verified_rows = [row for row in rows if row.get("zip_comparison") == "ZIP_GIT_BLOB_HASH_MATCH"]
+    if len(verified_rows) != 346:
+        fail(f"expected 346 verified source-to-port rows, found {len(verified_rows)}")
+    exceptions = {row.get("source_path"): row for row in rows if row.get("source_path") in {
+        "shaders/lib/config.glsl", "shaders/shaders.properties"
+    }}
+    if set(exceptions) != {"shaders/lib/config.glsl", "shaders/shaders.properties"}:
+        fail("the two documented uploaded-archive exceptions are missing from the ledger")
 else:
     fail("reference/source-file-map.csv is missing")
+
+exception_archive = ROOT / "reference/uploaded-archive-exceptions.zip"
+if not exception_archive.is_file():
+    fail("exact uploaded-archive exception snapshot is missing")
+archive_bytes = exception_archive.read_bytes()
+expected_archive_sha256 = "7fabca8c727fe459d44fdf250aa2c654d553f184d8a9e65b2465df8860ff6ba7"
+if hashlib.sha256(archive_bytes).hexdigest() != expected_archive_sha256:
+    fail("uploaded-archive exception snapshot SHA-256 does not match")
+expected_exception_blobs = {
+    "shaders/lib/config.glsl": "7c8f086dfa749f2c61707782786897620a3564d5",
+    "shaders/shaders.properties": "712ebede6b2ad78a92ee6cb39bf1f5fb07bdfdb1",
+}
+try:
+    with zipfile.ZipFile(exception_archive) as archive:
+        if set(archive.namelist()) != set(expected_exception_blobs):
+            fail("uploaded-archive exception snapshot has unexpected entries")
+        for path, expected_blob in expected_exception_blobs.items():
+            data = archive.read(path)
+            header = f"blob {len(data)}\\0".encode("ascii")
+            actual_blob = hashlib.sha1(header + data).hexdigest()
+            if actual_blob != expected_blob:
+                fail(f"uploaded source exception hash mismatch: {path}")
+            active_path = ROOT / path if path != "shaders/shaders.properties" else ROOT / "shaders.properties"
+            if not active_path.is_file() or active_path.read_bytes() == data:
+                fail(f"active tuned/merged file is missing or still an unmodified source copy: {path}")
+except zipfile.BadZipFile:
+    fail("uploaded-archive exception snapshot is not a valid ZIP")
 
 print(f"PASS: {len(shader_files)} shader source files inspected")
 print("PASS: all #include targets resolve")
