@@ -46,6 +46,9 @@ Do not overwrite these archive-specific variants with current upstream versions 
   - `shaders/lib/`: 38 files; Git blob hashes match upstream MakeUp tree.
   - `shaders/src/`: 22 files; Git blob hashes match upstream MakeUp tree.
 - One common module (`solid_blocks_fragment.glsl`) was also hash-checked directly against the uploaded ZIP and matched.
+- All 9 `shaders/lang/*.lang` files and all 3 PNG textures plus their 3 `.mcmeta` animation files are now present; their Git blob hashes match the uploaded ZIP exactly.
+- All 210 vertex/fragment entrypoints now declare `#version 330`; sampled root, Overworld, Nether and End wrappers retain the source structure with the GLSL compatibility-version migration. A complete per-wrapper text diff is still pending.
+- The source tree contains 344 files under `shaders/`; 343 now exist at their active destination paths. The source `shaders/shaders.properties` is intentionally relocated/merged into the pack-root `shaders.properties`.
 - Root and dimension-specific wrapper samples were checked against upstream. Their main migration is `#version 120` to `#version 330 compatibility`; the shared source includes remain unchanged.
 - Upstream developer documentation, README, helpful notes and upstream shader properties are retained under `reference/makeup-ultra-fast-upstream/` where imported. This is not yet a complete byte-for-byte mirror of the uploaded archive.
 - Full MakeUp settings UI and original option screens have been restored into the pack-root `shaders.properties`; added Lightning `Performance` and `Quality` profiles.
@@ -77,7 +80,7 @@ Do not overwrite these archive-specific variants with current upstream versions 
 1. Complete exact archive-to-repository per-file checksums and disposition records.
 2. Recover the archive-specific config/properties and integrate the Performance profile without losing option screens, textures, dimension rules or pipeline passes.
 3. Finish root and dimension wrapper port checks, then audit all buffer/pass dependencies.
-4. Resolve the Gradle wrapper JAR issue.
+4. Finish exact ZIP comparison for the 210 wrapper stages and all remaining root/property files; preserve the archive-specific config/properties differences.
 5. Add actual GLSL compile/link validation using the same Iris preprocessing path as the template.
 6. Run Iris runtime loading and dimension/feature smoke tests.
 7. Compare visual output and tune performance budgets.
