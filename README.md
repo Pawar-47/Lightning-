@@ -51,7 +51,7 @@ The packaged ZIP is written under `build/releases/`. GitHub Actions runs static 
 
 - Static shader include/version checks: passing in CI.
 - Feature macro/profile and performance-budget checks: passing in CI.
-- Reference language and texture asset checks: added to CI; latest run pending.
+- Reference language and texture asset checks: passing in the latest completed CI run.
 - Gradle shaderpack ZIP packaging: passing in CI.
 - GLSL stage compile/link: not yet verified.
 - Iris runtime loading and visual comparison: not yet verified.
