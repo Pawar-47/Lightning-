@@ -41,9 +41,10 @@ See [`SOURCE_PORT_VERIFICATION.md`](SOURCE_PORT_VERIFICATION.md) for the per-fam
 
 ## CI evidence
 
-- Latest previously verified run: [44812946032](https://github.com/Pawar-47/Lightning-/actions/runs/44812946032) — all steps passed before the source-ledger validator extension.
-- The latest validator extension now checks the 346 verified ledger rows and the two source-exception hashes; its new CI run is pending.
-- The last successful package artifact was 374,357 bytes.
+- Latest verified run: [44816752848](https://github.com/Pawar-47/Lightning-/actions/runs/44816752848) — completed successfully on commit `0ec483c41b0e0f86f2218efe25344f871444f501`.
+- All workflow steps passed: static shader structure/include checks, source-port audit-tool syntax check, Java/Gradle setup, shaderpack ZIP packaging and artifact upload.
+- The uploaded CI artifact is `Lightning-shaderpack`, 374,381 bytes (artifact ID `14668494255`; SHA-256 `7c27d4fa5a037ea8a730ffd5b3745c92ef6f02537444998f78f250c728c537a5`).
+- The workflow syntax-checks `tools/verify_source_port.py`; it does not execute the full ZIP comparison because the private user-uploaded archive is not stored in the repository.
 - CI structure/package checks are not GLSL stage compilation, Iris runtime loading, visual comparison or target-hardware benchmarking.
 
 ## Known gaps — do not mark complete
