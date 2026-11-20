@@ -28,10 +28,8 @@ jobs:
           java-version: "21"
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: "8.12.1"
       - name: Build shaderpack ZIP
-        run: gradle --no-daemon zipShaderpack
+        run: ./gradlew --no-daemon zipShaderpack
       - name: Upload shaderpack artifact
         uses: actions/upload-artifact@v4
         with:
