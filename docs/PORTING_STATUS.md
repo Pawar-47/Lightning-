@@ -37,7 +37,7 @@ The uploaded archive contains 348 actual files (742,051 uncompressed bytes) afte
 - Performance profile retains the major effects. It uses bounded budgets and the cheaper depth-based godray path (`VOL_LIGHT=1`); Quality retains the full shadow-aware volumetric-light path (`VOL_LIGHT=2`).
 - Added `tools/validate_shaderpack.py` and `.github/workflows/shaderpack-validation.yml`.
 
-See [`SOURCE_PORT_VERIFICATION.md`](SOURCE_PORT_VERIFICATION.md) for the per-family aggregate hashes and method.
+See [`SOURCE_PORT_VERIFICATION.md`](SOURCE_PORT_VERIFICATION.md) for the per-family aggregate hashes and [`ARCHIVE_EXCEPTION_RECONCILIATION.md`](ARCHIVE_EXCEPTION_RECONCILIATION.md) for the two intentional config/options-file changes.
 
 ## CI evidence
 
