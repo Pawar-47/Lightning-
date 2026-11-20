@@ -34,7 +34,7 @@ EXPECTED_AGGREGATES = {
     "shaders/world0": "38bd1d3bba10b060c855b7a9953595abd8fe22d3",
     "shaders/world1": "a431a544435b6c705a5012b9593577f66d90edc3",
 }
-VERSION_DIRECTIVE = re.compile(rb"(?m)^#version[ \t]+120\\b")
+VERSION_DIRECTIVE = re.compile(rb"(?m)^#version[ \t]+120")
 
 
 def git_blob_sha(data: bytes) -> str:
@@ -149,7 +149,7 @@ def main() -> None:
 
     for group, expected_hash in EXPECTED_AGGREGATES.items():
         pairs = sorted(grouped.get(group, []), key=lambda item: item[0])
-        aggregate_input = "".join(f"{path}\\0{blob}\\n" for path, blob in pairs).encode("utf-8")
+        aggregate_input = "".join(path + chr(0) + blob + chr(10) for path, blob in pairs).encode("utf-8")
         actual_hash = hashlib.sha1(aggregate_input).hexdigest()
         if actual_hash != expected_hash:
             fail(f"{group}: aggregate mismatch ({actual_hash} != {expected_hash})")
