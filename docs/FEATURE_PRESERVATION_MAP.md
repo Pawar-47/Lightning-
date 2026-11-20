@@ -15,7 +15,7 @@ This map records where the MakeUp-derived feature implementation lives and which
 | Enhanced AO | `lib/ao.glsl`, deferred fragment path | 4 AO steps | Enabled; halo/quality validation pending |
 | TAA / FXAA | `lib/fast_taa.glsl`, `lib/fxaa.glsl`, composite2 | TAA enabled in Performance; FXAA+TAA available in Quality profile | Source preserved; runtime validation pending |
 | Bloom | `lib/bloom.glsl`, `lib/blur.glsl`, composite1 | 2 bloom sample pairs | Enabled; brightness/halo validation pending |
-| Volumetric light / godrays | `lib/volumetric_light.glsl`, composite path | Depth-based mode, 4 godray steps | Enabled in Performance; higher-cost volumetric mode in Quality |
+| Volumetric light / godrays | `lib/volumetric_light.glsl`, composite path | True volumetric mode, 4 godray steps in Performance and Quality | Enabled in Performance; higher-cost volumetric mode in Quality |
 | Material gloss | `lib/material_gloss_fragment.glsl`, `lib/material_gloss_fragment_voxy.glsl` | Existing material classification; no external PBR pack dependency | Enabled; material validation pending |
 | Depth of field | `config.glsl`, depth helpers and composite1 | DOF enabled at existing 0.09 strength | Enabled; scene/performance validation pending |
 | Motion blur | `lib/motion_blur.glsl`, composite2 | 3 samples, reduced strength 0.75 in Performance | Enabled; ghosting/performance validation pending |
