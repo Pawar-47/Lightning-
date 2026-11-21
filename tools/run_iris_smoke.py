@@ -37,7 +37,7 @@ def main() -> None:
     env["MESA_GLSL_VERSION_OVERRIDE"] = "450"
 
     command = [
-        "xvfb-run", "-a", "timeout", "--signal=TERM", "150s",
+        "xvfb-run", "-a", "timeout", "--signal=TERM", "--kill-after=10s", "150s",
         "./gradlew", "--no-daemon", "runShaderClient",
     ]
     try:
@@ -48,11 +48,11 @@ def main() -> None:
             text=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
-            timeout=210,
+            timeout=180,
             check=False,
         )
     except subprocess.TimeoutExpired as exc:
-        fail("Iris development client exceeded the 210-second smoke-test limit", exc.stdout or "")
+        fail("Iris development client exceeded the 180-second smoke-test limit", exc.stdout or "")
 
     build_dir = ROOT / "build"
     build_dir.mkdir(exist_ok=True)
