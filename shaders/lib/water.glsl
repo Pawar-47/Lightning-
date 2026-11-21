@@ -18,6 +18,7 @@ vec3 fastRaymarch(vec3 direction, vec3 hitPoint, inout float infinite, float dit
     bool searchFlag = false;
     bool hiddenFlag = false;
     bool firstHidden = true;
+    bool outOfEyeFlag = false;
     bool toFar = false;
     vec3 lastScreenMarchPos;
 
@@ -45,10 +46,7 @@ vec3 fastRaymarch(vec3 direction, vec3 hitPoint, inout float infinite, float dit
             screenMarchPos.y > 1.0 ||
             screenMarchPos.z < 0.0
         ) {
-            // The existing fallback returns this exact ray point with infinite=1.
-            // Exit now instead of performing the remaining screen-depth iterations.
-            infinite = 1.0;
-            return screenMarchPos;
+            outOfEyeFlag = true;
         }
 
         if (screenMarchPos.z > 0.9999) {
@@ -80,7 +78,10 @@ vec3 fastRaymarch(vec3 direction, vec3 hitPoint, inout float infinite, float dit
 
     infinite = float(screenDepth > 0.9999);
 
-    if (toFar) {
+    if (outOfEyeFlag) {
+        infinite = 1.0;
+        return screenMarchPos;
+    } else if (toFar) {
         if (screenDepth > 0.9999) {
             infinite = 1.0;
             return screenMarchPos;

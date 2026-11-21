@@ -30,13 +30,13 @@ The uploaded archive contains 348 actual files (742,051 uncompressed bytes) afte
 ## Current implementation checkpoint
 
 - Template Gradle build foundation imported; project identity changed to Lightning (`dev.pawar47.lightning`, `0.1.0-alpha.1`).
-- **Source-to-port comparison: 346/348 files are reproducibly verified through deterministic transformations.** 133 files are byte-identical to the uploaded ZIP; all 210 `.fsh/.vsh` entrypoints differ only by the `#version 120` → `#version 330 compatibility` migration; three library modules have explicitly documented, reproducible early-exit optimizations. The two config/options exceptions remain separately identified.
-- The 100 shared modules comprise 41 `common/`, 37 non-config `lib/`, and 22 `src/` files. Of the 37 non-config library files, 34 remain byte-identical and three are tracked deterministic optimization derivatives.
-- All 17 language/texture assets have exact uploaded-ZIP hash matches.
+- **Source-to-port comparison: 346/348 files are reproducibly verified through deterministic transformations.** 134 files are byte-identical to the uploaded ZIP; all 210 `.fsh/.vsh` entrypoints differ only by the `#version 120` → `#version 330 compatibility` migration; two library modules have explicitly documented, reproducible cloud-opacity early-exit optimizations. The two config/options exceptions remain separately identified.
+- The 100 shared modules comprise 41 `common/`, 37 non-config `lib/`, and 22 `src/` files. Of the 37 non-config library files, 35 remain byte-identical and two are tracked deterministic optimization derivatives.
+- All 15 language/texture assets have exact uploaded-ZIP hash matches.
 - All 17 reference and shader metadata files are separately accounted for in the source ledger.
 - The two archive-specific exceptions (`shaders/lib/config.glsl` and `shaders/shaders.properties`) are intentionally customized/merged. Their exact original Git blob hashes are recorded in the final column of `reference/source-file-map.csv`; the active config is feature-restored and tuned, while the active root properties file merges the original settings UI with Lightning profiles.
 - The source `shaders/shaders.properties` is intentionally relocated/merged into the pack-root `shaders.properties`.
-- All 210 archive-derived entrypoints declare GLSL 330. The template foundation contributes two additional `gbuffers_textured_lit` vertex/fragment entrypoints, bringing the distributable compiler matrix to 212 stages. Shared shader modules retain their source contents except for the three documented deterministic early-exit optimization derivatives.
+- All 210 archive-derived entrypoints declare GLSL 330. The template foundation contributes two additional `gbuffers_textured_lit` vertex/fragment entrypoints, bringing the distributable compiler matrix to 212 stages. Shared shader modules retain their source contents except for the two documented deterministic cloud-opacity early-exit derivatives.
 - Full MakeUp settings UI and original option screens are present. Lightning adds `Performance` and `Quality` profiles.
 - Performance profile retains the major effects. It uses bounded budgets and the cheaper depth-based godray path (`VOL_LIGHT=1`); Quality retains the full shadow-aware volumetric-light path (`VOL_LIGHT=2`).
 - Added `tools/validate_shaderpack.py`, `tools/verify_source_port.py` and `.github/workflows/shaderpack-validation.yml`.
@@ -54,8 +54,7 @@ See [`SOURCE_PORT_VERIFICATION.md`](SOURCE_PORT_VERIFICATION.md) for the per-fam
 
 ## Known gaps — do not mark complete
 
-1. Complete semantic/line-by-line review of the two archive-specific files against the active tuned config and merged properties file.
-2. GLSL compiler validation of all 210 entrypoints (new CI gate; pending first run).
+1. Pass the new GLSL compiler gate for all 212 entrypoints and resolve any genuine source failures.
 3. Minecraft + Iris + Sodium runtime shader-load and dimension/feature smoke tests.
 4. Visual comparison across Overworld, Nether, End, water, clouds, shadows and post-processing.
 5. FPS/frame-time benchmark on the Intel Core i3-5005U / Intel HD 5500 / 8 GB Linux Mint target laptop.
@@ -64,8 +63,7 @@ See [`SOURCE_PORT_VERIFICATION.md`](SOURCE_PORT_VERIFICATION.md) for the per-fam
 
 ## Next work order
 
-1. Complete the semantic diff/reconciliation of the two archive-specific files.
-2. Pass the new GLSL compiler gate and resolve any real shader compile failures.
+1. Pass the new GLSL compiler gate and resolve any genuine shader compile failures.
 3. Run Iris runtime loading and dimension/feature smoke tests.
 4. Compare visual output and tune performance budgets without silently removing major effects.
 5. Benchmark on the target laptop.

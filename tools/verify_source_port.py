@@ -38,26 +38,6 @@ VERSION_DIRECTIVE = re.compile(rb"(?m)^#version[ \t]+120")
 # These narrowly scoped, output-preserving optimizations are applied to the
 # uploaded source bytes before comparing them with Lightning's active files.
 OPTIMIZATION_PATCHES = {
-    "shaders/lib/water.glsl": [
-        (
-            b"    bool outOfEyeFlag = false;\n",
-            b"",
-        ),
-        (
-            b"        ) {\n            outOfEyeFlag = true;\n        }\n\n        if (screenMarchPos.z > 0.9999) {",
-            b"        ) {\n"
-            b"            // The existing fallback returns this exact ray point with infinite=1.\n"
-            b"            // Exit now instead of performing the remaining screen-depth iterations.\n"
-            b"            infinite = 1.0;\n"
-            b"            return screenMarchPos;\n"
-            b"        }\n\n"
-            b"        if (screenMarchPos.z > 0.9999) {",
-        ),
-        (
-            b"    if (outOfEyeFlag) {\n        infinite = 1.0;\n        return screenMarchPos;\n    } else if (toFar) {",
-            b"    if (toFar) {",
-        ),
-    ],
     "shaders/lib/volumetric_clouds.glsl": [
         (
             b"            intersection_pos += increment;",
@@ -213,7 +193,7 @@ def main() -> None:
             print(f"DIFF: {failure}")
         fail(f"{len(failures)} source-port comparison failure(s)")
 
-    if unchanged != 133 or version_ported != 210 or optimized != 3 or exceptions != 2:
+    if unchanged != 134 or version_ported != 210 or optimized != 2 or exceptions != 2:
         fail(f"unexpected disposition counts: unchanged={unchanged}, version_ported={version_ported}, optimized={optimized}, exceptions={exceptions}")
 
     for group, expected_hash in EXPECTED_AGGREGATES.items():

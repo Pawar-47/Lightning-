@@ -8,14 +8,14 @@ Reference: the user-uploaded MakeUp Ultra Fast v9.6 `Shader.zip`
 
 **346 of 348 uploaded files are reproducibly verified against their active repository destinations.**
 
-- 133 files are byte-for-byte copies of the uploaded ZIP.
+- 134 files are byte-for-byte copies of the uploaded ZIP.
 - 210 vertex/fragment entrypoints differ only by the deliberate GLSL version migration: the first `#version 120` directive is replaced with `#version 330 compatibility`. All remaining bytes are preserved.
-- Three library modules receive narrowly scoped deterministic performance patches, documented below.
+- Two library modules receive narrowly scoped deterministic cloud-opacity performance patches, documented below.
 - Two archive-specific files are intentionally customized/merged rather than copied unchanged:
   - `shaders/lib/config.glsl`
   - `shaders/shaders.properties`
 
-The exact original Git blob hashes for the two config/options exceptions are recorded in the final column of `reference/source-file-map.csv`. The three optimization derivatives are separately marked `ZIP_OPTIMIZED_PATCH` in the ledger. The original uploaded ZIP remains the source authority.
+The exact original Git blob hashes for the two config/options exceptions are recorded in the final column of `reference/source-file-map.csv`. The two optimization derivatives are separately marked `ZIP_OPTIMIZED_PATCH` in the ledger. The original uploaded ZIP remains the source authority.
 
 ## Verification method
 
@@ -23,13 +23,13 @@ For every source file, compute its Git blob SHA-1 as:
 
 `SHA1("blob " + byte_length + NUL + file_bytes)`
 
-For the 210 shader stages, apply only the documented first-line version replacement. For the three optimization derivatives, apply the exact deterministic byte replacements defined in `tools/verify_source_port.py`; each patch anchor must occur exactly once. Compare the resulting expected bytes with the active repository destination.
+For the 210 shader stages, apply only the documented first-line version replacement. For the two cloud-opacity optimization derivatives, apply the exact deterministic byte replacements defined in `tools/verify_source_port.py`; each patch anchor must occur exactly once. Compare the resulting expected bytes with the active repository destination.
 
 For unchanged families, aggregate digests are SHA-1 values over the sorted sequence:
 
 `destination_path + NUL + destination_git_blob_sha1 + newline`
 
-The library family is checked per file rather than with a family aggregate because it contains three deterministic optimization derivatives. The verifier still checks each library file byte-for-byte after applying the exact patch rules. Reproduce the complete per-file comparison locally with:
+The library family is checked per file rather than with a family aggregate because it contains two deterministic optimization derivatives. The verifier still checks each library file byte-for-byte after applying the exact patch rules. Reproduce the complete per-file comparison locally with:
 
 `python tools/verify_source_port.py /path/to/Shader.zip`
 
@@ -40,23 +40,24 @@ The library family is checked per file rather than with a family aggregate becau
 | `shaders/` root entrypoints and metadata | 57 | Aggregate SHA-1: `996a5b107aed0631922cef032186567acc9dced7` |
 | `shaders/common/` | 41 | Aggregate SHA-1: `3bba39394ee1cd1435b3bd608b80945902f160b0` |
 | `shaders/lang/` | 9 | Aggregate SHA-1: `4a11948f1234304693f5c439b051de7522e54762` |
-| `shaders/lib/` excluding customized config | 37 | Per-file exact/patch comparison; 34 exact copies and 3 optimized derivatives |
+| `shaders/lib/` excluding customized config | 37 | Per-file exact/patch comparison; 35 exact copies and 2 optimized derivatives |
 | `shaders/src/` | 22 | Aggregate SHA-1: `8cd0591c09888f627db47f5a0f47d1995deb6c27` |
 | `shaders/textures/` | 6 | Aggregate SHA-1: `6fb4e2c8db743a8888e08b0a80e0b2aa63f76d19` |
 | `shaders/world-1/` | 55 | Aggregate SHA-1: `fefad057c8a689bbde69adab937dbef40d992ea4` |
 | `shaders/world0/` | 58 | Aggregate SHA-1: `38bd1d3bba10b060c855b7a9953595abd8fe22d3` |
 | `shaders/world1/` | 57 | Aggregate SHA-1: `a431a544435b6c705a5012b9593577f66d90edc3` |
-| **Total reproducibly verified** | **346** | **133 exact + 210 version-only + 3 deterministic patches** |
+| **Total reproducibly verified** | **346** | **134 exact + 210 version-only + 2 deterministic patches** |
 
 ## Deterministic performance patches
 
-These changes preserve the original effect paths and avoid unnecessary loop iterations without removing a feature or framebuffer pass.
+These two changes preserve the original cloud effects and avoid unnecessary loop iterations after the accumulated opacity has reached the final clamp threshold.
 
-1. `shaders/lib/water.glsl`: when the SSR ray leaves screen bounds, return the same `screenMarchPos` and set `infinite=1.0` immediately. The previous code completed the remaining raymarch iterations and returned that same fallback point after the loop.
-2. `shaders/lib/volumetric_clouds.glsl`: stop sampling after accumulated cloud opacity reaches `opacity_dist`. The final result clamps `cloud_value / opacity_dist` to 1.0, so further positive opacity contributions cannot change the final clamped value.
-3. `shaders/lib/volumetric_clouds_end.glsl`: apply the same mathematically bounded opacity-saturation exit to End clouds.
+1. `shaders/lib/volumetric_clouds.glsl`: stop sampling after accumulated cloud opacity reaches `opacity_dist`. The final result clamps `cloud_value / opacity_dist` to 1.0, so further positive opacity contributions cannot change the final clamped value.
+2. `shaders/lib/volumetric_clouds_end.glsl`: apply the same mathematically bounded opacity-saturation exit to End clouds.
 
-The optimization patches do not yet have measured FPS gains. Their correctness is based on control-flow and final-clamp equivalence; runtime and visual checks remain pending.
+**SSR early-exit correction:** an earlier attempted patch returned immediately when the reflection ray first left screen bounds. Direct comparison with the uploaded source showed that the original loop continues updating the ray point before returning its final fallback coordinate. Returning at the first out-of-bounds sample therefore changed the fallback result. That SSR patch has been reverted; `shaders/lib/water.glsl` is now byte-identical to the uploaded archive. Future SSR optimization must preserve the original final ray point and depth-sampling behavior.
+
+The two cloud patches do not yet have measured FPS gains. Their correctness is based on control-flow and final-clamp equivalence; runtime and visual checks remain pending.
 
 ## The two intentional config/options exceptions
 

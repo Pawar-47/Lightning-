@@ -60,8 +60,8 @@ for relative in required:
 
 
 water_text = (SHADERS / "lib/water.glsl").read_text(encoding="utf-8", errors="replace")
-if "outOfEyeFlag" in water_text or "return screenMarchPos;" not in water_text:
-    fail("SSR out-of-screen early-return optimization is missing or incomplete")
+if "bool outOfEyeFlag = false;" not in water_text or "if (outOfEyeFlag)" not in water_text:
+    fail("original SSR out-of-screen fallback path is missing")
 for cloud_path in ["lib/volumetric_clouds.glsl", "lib/volumetric_clouds_end.glsl"]:
     cloud_text = (SHADERS / cloud_path).read_text(encoding="utf-8", errors="replace")
     if cloud_text.count("if (cloud_value >= opacity_dist)") != 1:
@@ -165,7 +165,6 @@ if map_path.is_file():
         fail(f"expected 343 exact/version-only source-to-port rows, found {len(verified_rows)}")
     optimized_rows = {row.get("source_path") for row in rows if row.get("zip_comparison") == "ZIP_OPTIMIZED_PATCH"}
     expected_optimized_rows = {
-        "shaders/lib/water.glsl",
         "shaders/lib/volumetric_clouds.glsl",
         "shaders/lib/volumetric_clouds_end.glsl",
     }
