@@ -15,7 +15,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SHADERS = ROOT / "shaders"
-INCLUDE = re.compile(r'(?m)^(\s*#\s*include\s+)"(/[^"]+)"')
+INCLUDE = re.compile(r'(?m)^(\s*#\s*include\s+)"/([^"]+)"')
 VERSION = re.compile(r"(?m)^(\s*#\s*version\s+\d+[^\n]*)(\n|$)")
 
 
