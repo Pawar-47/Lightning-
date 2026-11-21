@@ -71,6 +71,18 @@ def main() -> None:
             relative = source.relative_to(SHADERS)
             stage = "vert" if source.suffix == ".vsh" else "frag"
             expanded = expand_includes(source)
+            if relative.name.startswith("dh_"):
+                # Iris injects these symbols for Distant Horizons programs.
+                # The compile-only preamble mirrors the interface documented
+                # by Iris; it is not written into the distributable shaders.
+                injected = ["#define DISTANT_HORIZONS 1", "#define TRANSITION_DH_INF 0.0"]
+                if stage == "vert":
+                    injected.append("in int dhMaterialId;")
+                lines = expanded.splitlines()
+                if not lines or not lines[0].startswith("#version"):
+                    fail(f"{relative.as_posix()}: missing leading #version")
+                expanded = "\n".join([lines[0], *injected, *lines[1:]]) + "\n"
+
             temporary_entry = temp_root / relative
             temporary_entry.parent.mkdir(parents=True, exist_ok=True)
             temporary_entry.write_text(expanded, encoding="utf-8")
