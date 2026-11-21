@@ -75,7 +75,7 @@ def main() -> None:
                 # Iris injects these symbols for Distant Horizons programs.
                 # The compile-only preamble mirrors the interface documented
                 # by Iris; it is not written into the distributable shaders.
-                injected = ["#define DISTANT_HORIZONS 1", "#define TRANSITION_DH_INF 0.0"]
+                injected = ["#define DISTANT_HORIZONS 1"]
                 if stage == "vert":
                     injected.append("in int dhMaterialId;")
                 lines = expanded.splitlines()
