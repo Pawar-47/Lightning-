@@ -4,9 +4,10 @@ Last updated: 2026-11-21
 
 ## Project roots and boundary
 
-- New project repository: `Pawar-47/Lightning-`
+- Project repository: `Pawar-47/Lightning-`
 - Development/build foundation: `ascpixi/minecraft-shader-template`, upstream revision `ab2b99c9e1715cb951936157fe3c2ef94890233b`
 - User-supplied reference archive: `Shader.zip`, identified as MakeUp Ultra Fast v9.6 by Javier Garduño (KDXavier)
+- Lightning is MakeUp-derived because that is the source archive supplied for this repository. It is not a BSL-source port.
 - No Aetheris-Shaders source, commits, branches or releases are used as Lightning's foundation.
 
 ## Uploaded archive inventory
@@ -29,41 +30,40 @@ The uploaded archive contains 348 actual files (742,051 uncompressed bytes) afte
 
 ## Current implementation checkpoint
 
-- Template Gradle build foundation imported; project identity changed to Lightning (`dev.pawar47.lightning`, `0.1.0-alpha.1`).
-- **Source-to-port comparison: 346/348 files are reproducibly verified through deterministic transformations.** 134 files are byte-identical to the uploaded ZIP; all 210 `.fsh/.vsh` entrypoints differ only by the `#version 120` → `#version 330 compatibility` migration; two library modules have explicitly documented, reproducible cloud-opacity early-exit optimizations. The two config/options exceptions remain separately identified.
-- The 100 shared modules comprise 41 `common/`, 37 non-config `lib/`, and 22 `src/` files. Of the 37 non-config library files, 35 remain byte-identical and two are tracked deterministic optimization derivatives.
-- All 15 language/texture assets have exact uploaded-ZIP hash matches.
-- The two archive-specific exceptions (`shaders/lib/config.glsl` and `shaders/shaders.properties`) are intentionally customized/merged. Their exact original Git blob hashes are recorded in the final column of `reference/source-file-map.csv`; the active config is feature-restored and tuned, while the active root properties file merges the original settings UI with Lightning profiles.
+- Template Gradle build foundation imported; project identity is Lightning (`dev.pawar47.lightning`).
+- **Source-to-port comparison: 346/348 files are reproducibly verified through deterministic transformations.** 134 files are byte-identical to the uploaded ZIP; all 210 archive-derived `.fsh/.vsh` entrypoints differ only by the `#version 120` → `#version 330 compatibility` migration; two library modules have explicitly documented, reproducible cloud-opacity early-exit optimizations. The two config/options exceptions are separately identified and semantically reconciled.
+- The 100 shared modules comprise 41 `common/`, 37 non-config `lib/`, and 22 `src/` files. Of the 37 non-config library files, 35 remain byte-identical and two are tracked deterministic cloud-opacity optimization derivatives.
+- All 15 language and texture assets have exact uploaded-ZIP hash matches.
+- The two archive-specific exceptions (`shaders/lib/config.glsl` and `shaders/shaders.properties`) are intentionally customized/merged. Their exact original Git blob hashes are recorded in the final column of `reference/source-file-map.csv`.
+- The active config restores the requested visual features and applies Lightning's reduced budgets. The active root properties file retains the original options UI while replacing the legacy effect-disabling profiles with Lightning's Performance and Quality profiles.
 - The source `shaders/shaders.properties` is intentionally relocated/merged into the pack-root `shaders.properties`.
-- All 210 archive-derived entrypoints declare GLSL 330. The template foundation contributes two additional `gbuffers_textured_lit` vertex/fragment entrypoints, bringing the distributable compiler matrix to 212 stages. Shared shader modules retain their source contents except for the two documented deterministic cloud-opacity early-exit derivatives.
-- Full MakeUp settings UI and original option screens are present. Lightning adds `Performance` and `Quality` profiles.
-- Performance profile retains the major effects. It uses bounded budgets and the cheaper depth-based godray path (`VOL_LIGHT=1`); Quality retains the full shadow-aware volumetric-light path (`VOL_LIGHT=2`).
-- Added `tools/validate_shaderpack.py`, `tools/verify_source_port.py` and `.github/workflows/shaderpack-validation.yml`.
+- All 210 archive-derived entrypoints declare GLSL 330. The template foundation contributes two additional `gbuffers_textured_lit` vertex/fragment entrypoints, bringing the distributable compiler matrix to 212 stages.
+- Performance keeps the major effects available. It uses bounded budgets and the cheaper depth-based godray path (`VOL_LIGHT=1`); Quality retains the full shadow-aware volumetric-light path (`VOL_LIGHT=2`).
+- The SSR early-return experiment was reverted after source comparison showed it changed the original out-of-screen fallback coordinate. `shaders/lib/water.glsl` is byte-identical to the uploaded ZIP.
+- The only retained deterministic early exits are in Overworld and End volumetric-cloud loops, after accumulated opacity reaches the final clamp threshold.
+- Added source validation, uploaded-archive verification, GLSL compilation and Iris client-startup smoke-test tooling.
 
-See [`SOURCE_PORT_VERIFICATION.md`](SOURCE_PORT_VERIFICATION.md) for the per-family aggregate hashes and [`ARCHIVE_EXCEPTION_RECONCILIATION.md`](ARCHIVE_EXCEPTION_RECONCILIATION.md) for the two intentional config/options-file changes.
+See [`SOURCE_PORT_VERIFICATION.md`](SOURCE_PORT_VERIFICATION.md) for per-family verification and [`ARCHIVE_EXCEPTION_RECONCILIATION.md`](ARCHIVE_EXCEPTION_RECONCILIATION.md) for the completed config/options semantic diff.
 
 ## CI evidence
 
-- Latest pre-compilation validation run: [44819794407](https://github.com/Pawar-47/Lightning-/actions/runs/44819794407) — completed successfully on commit `f61bacc4cf3123405a4538c0387eac82c58a6772`.
-- That run passed static shader structure/include checks, required-feature and early-exit optimization assertions, audit-tool syntax check, Java/Gradle setup, shaderpack ZIP packaging and artifact upload.
-- The distributable CI artifact was `Lightning-shaderpack`, 378,244 bytes (artifact ID `14672295007`; archive digest `sha256:53df5105e02572187658145d85c45fe2c7da56c2945d49a9ecfd7b8ca099b7f6`). The nested distributable ZIP carries the LGPL license text and third-party attribution notice.
-- The workflow now adds a real offline GLSL compiler pass for all 210 vertex/fragment entrypoints using `glslangValidator`. Its first CI result is pending.
+- Full validation run: [44842412214](https://github.com/Pawar-47/Lightning-/actions/runs/44842412214) — successful on commit `69b7804ca30f721bf5d4149590c9674852178694`.
+- Static shader structure/include checks, feature/profile assertions, source-audit syntax checks, all 212 offline GLSL entrypoints, Gradle ZIP packaging and the headless Iris client-startup smoke test passed.
+- The smoke log confirms Minecraft 1.21.5, Fabric Loader 0.16.14, Iris 1.8.11, Sodium 0.6.12 and an active OpenGL debug context. `Lightning-dev` is configured in Iris; the test does not enter a world or prove in-world shaderpack compilation.
+- Shaderpack artifact: `Lightning-shaderpack`, 378,182 bytes (artifact ID `14681393040`; artifact digest `sha256:4fa8282a066bd0939ac4610c165597a1befe6739b17f0c3d8a775be19da0368a`). The distributable contains the LGPL license and third-party attribution.
 - The uploaded ZIP comparison remains reproducible locally with `python tools/verify_source_port.py /path/to/Shader.zip`; the source archive is intentionally not included in the distributable.
-- A successful glslang run still does not prove Iris runtime loading, GPU-driver compilation, visual parity or target-hardware performance.
 
 ## Known gaps — do not mark complete
 
-1. Pass the new GLSL compiler gate for all 212 entrypoints and resolve any genuine source failures.
-2. Minecraft + Iris + Sodium runtime shader-load and dimension/feature smoke tests.
-3. Visual comparison across Overworld, Nether, End, water, clouds, shadows and post-processing.
-4. FPS/frame-time benchmark on the Intel Core i3-5005U / Intel HD 5500 / 8 GB Windows 10 target laptop.
-5. The installed Minecraft/Iris/Sodium versions have not yet been confirmed; template defaults are provisional.
-6. No published release yet. Do not present a CI ZIP as a finished, hardware-validated release.
+1. Iris shaderpack loading and actual program compilation/linking after entering a world.
+2. Visual comparison across Overworld, Nether, End, water, clouds, shadows and post-processing.
+3. FPS/frame-time benchmark on the Intel Core i3-5005U / Intel HD 5500 / 8 GB Windows 10 target laptop.
+4. Confirmation that the user's installed Minecraft/Iris/Sodium versions match the template baseline.
+5. Stable-release readiness; `v0.1.0-alpha.2` is a test pre-release, not a hardware-validated stable release.
 
 ## Next work order
 
-1. Pass the new GLSL compiler gate and resolve any genuine shader compile failures.
-2. Run Iris runtime loading and dimension/feature smoke tests.
-3. Compare visual output and tune performance budgets without silently removing major effects.
-4. Benchmark on the target laptop.
-5. Publish a versioned release with exact validation boundaries and reproducible artifacts.
+1. Install the pre-release in the user's SK Launcher instance and test in-world shader loading.
+2. Capture comparable baseline, Performance and Quality frame-time/FPS results on the target laptop.
+3. Check all dimensions and major visual paths; tune budgets without silently disabling requested effects.
+4. Fix any runtime/visual issues and publish a stable release only after target-hardware validation.

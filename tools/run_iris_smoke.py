@@ -82,7 +82,7 @@ def main() -> None:
     ):
         fail("Iris reported a shader-pack loading or compilation error", combined)
 
-    print("PASS: Fabric development client started with Iris present and Lightning-dev selected.")
+    print("PASS: Fabric development client started with Iris present; Lightning-dev is configured in iris.properties.")
     print("NOTE: this smoke test does not enter a world or verify in-world rendering, visual output or FPS.")
 
 
