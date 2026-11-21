@@ -2,7 +2,7 @@
 
 ## Target
 
-Primary hardware target: Intel Core i3-5005U (2 cores / 4 threads, 15 W), Intel HD Graphics 5500 (OpenGL 4.3), 8 GB RAM, Linux Mint. The iGPU shares system memory; actual RAM channel configuration and driver behavior must be measured on the target laptop.
+Primary hardware target: Intel Core i3-5005U (2 cores / 4 threads, 15 W), Intel HD Graphics 5500 (OpenGL 4.3), 8 GB RAM, Windows 10. The iGPU shares system memory; actual RAM channel configuration and driver behavior must be measured on the target laptop.
 
 The initial development baseline in the authorized template is Minecraft 1.21.5, Iris 1.8.11, Sodium 0.6.12 and Java 21. This is a provisional template baseline, not yet a confirmed match for the user's installed Minecraft profile.
 

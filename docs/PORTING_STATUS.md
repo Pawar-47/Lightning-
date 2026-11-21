@@ -56,7 +56,7 @@ See [`SOURCE_PORT_VERIFICATION.md`](SOURCE_PORT_VERIFICATION.md) for the per-fam
 1. Pass the new GLSL compiler gate for all 212 entrypoints and resolve any genuine source failures.
 2. Minecraft + Iris + Sodium runtime shader-load and dimension/feature smoke tests.
 3. Visual comparison across Overworld, Nether, End, water, clouds, shadows and post-processing.
-4. FPS/frame-time benchmark on the Intel Core i3-5005U / Intel HD 5500 / 8 GB Linux Mint target laptop.
+4. FPS/frame-time benchmark on the Intel Core i3-5005U / Intel HD 5500 / 8 GB Windows 10 target laptop.
 5. The installed Minecraft/Iris/Sodium versions have not yet been confirmed; template defaults are provisional.
 6. No published release yet. Do not present a CI ZIP as a finished, hardware-validated release.
 

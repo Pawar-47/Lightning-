@@ -16,8 +16,8 @@ No Aetheris-Shaders files, commits, branches or releases are used as Lightning's
 - Intel Core i3-5005U, 2 cores / 4 threads, 2.00 GHz
 - Intel HD Graphics 5500 (OpenGL 4.3)
 - 8 GB RAM
-- Linux Mint
-- Minecraft Java with Iris and Sodium
+- Windows 10
+- Minecraft Java launched through SK Launcher with Iris and Sodium
 
 The development template currently pins Minecraft 1.21.5, Iris 1.8.11 and Sodium 0.6.12. Confirm the user's installed game profile before treating those as the final supported versions.
 
