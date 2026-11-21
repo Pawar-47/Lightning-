@@ -6,6 +6,7 @@ Iris-style root-relative includes are normalized in a temporary copy only.
 """
 from __future__ import annotations
 
+import os
 import re
 import shutil
 import subprocess
@@ -48,7 +49,7 @@ def main() -> None:
         for path in shadow_root.rglob("*"):
             if path.is_file() and path.suffix in {".fsh", ".vsh", ".glsl"}:
                 content = path.read_text(encoding="utf-8")
-                content = INCLUDE.sub(r'\1"\2"', content)
+                content = INCLUDE.sub(lambda match: match.group(1) + '"' + os.path.relpath(shadow_root / match.group(2), path.parent) + '"', content)
                 path.write_text(content, encoding="utf-8")
 
         for source in stages:
@@ -64,14 +65,12 @@ def main() -> None:
             # smoke test; Iris itself supplies its own shaderpack preprocessor.
             insertion = match.end(1)
             content = content[:insertion] + "\n#extension GL_GOOGLE_include_directive : require" + content[insertion:]
-            temporary_entry = temp_root / "entrypoints" / relative
-            temporary_entry.parent.mkdir(parents=True, exist_ok=True)
+            temporary_entry = shadow_root / relative
             temporary_entry.write_text(content, encoding="utf-8")
 
             command = [
                 compiler,
                 "-S", stage,
-                "-I" + str(shadow_root),
                 str(temporary_entry),
             ]
             result = subprocess.run(
