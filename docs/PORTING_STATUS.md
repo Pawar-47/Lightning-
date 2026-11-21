@@ -53,6 +53,15 @@ See [`SOURCE_PORT_VERIFICATION.md`](SOURCE_PORT_VERIFICATION.md) for per-family 
 - Shaderpack artifact: `Lightning-shaderpack`, 378,182 bytes (artifact ID `14681393040`; artifact digest `sha256:4fa8282a066bd0939ac4610c165597a1befe6739b17f0c3d8a775be19da0368a`). The distributable contains the LGPL license and third-party attribution.
 - The uploaded ZIP comparison remains reproducible locally with `python tools/verify_source_port.py /path/to/Shader.zip`; the source archive is intentionally not included in the distributable.
 
+## Published pre-release
+
+- **Published:** [Lightning v0.1.0-alpha.2](https://github.com/Pawar-47/Lightning-/releases/tag/v0.1.0-alpha.2), 2026-11-21.
+- **Release commit/tag target:** `9da6727a6688a49e128a7250622dad71324728b4`.
+- **Release asset:** `Lightning-0.1.0-alpha.2-shaderpack.zip`, 429,209 bytes.
+- **SHA-256:** `46fcb2881162cfba71fb318ab2db0efd44143c3024bfb4c99484593b5f95eee9`.
+- [Release pipeline run 44843067035](https://github.com/Pawar-47/Lightning-/actions/runs/44843067035) completed successfully, including all 212 GLSL entrypoints, shaderpack packaging, headless Iris startup smoke test and publication.
+- This is an alpha test pre-release. In-world Iris rendering, visual review and target-laptop performance measurements remain open.
+
 ## Known gaps — do not mark complete
 
 1. Iris shaderpack loading and actual program compilation/linking after entering a world.
