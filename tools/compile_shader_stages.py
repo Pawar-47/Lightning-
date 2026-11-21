@@ -2,11 +2,10 @@
 """Compile every Lightning .fsh/.vsh entrypoint with glslangValidator.
 
 This is an offline GLSL syntax/semantic smoke test, not an Iris runtime test.
-Iris shaderpack-root includes are rewritten as source-relative paths in a temporary copy only.
+Iris shaderpack-root includes are rewritten as absolute temporary paths for glslang only.
 """
 from __future__ import annotations
 
-import os
 import re
 import shutil
 import subprocess
@@ -44,12 +43,12 @@ def main() -> None:
         shutil.copytree(SHADERS, shadow_root)
 
         # Iris treats a leading slash in #include paths as shaderpack-root
-        # relative. Convert each one to a path relative to its including file
-        # so glslang resolves it without a custom include search path.
+        # relative. Rewrite each include to the corresponding absolute file
+        # in the temporary tree; tracked source files remain untouched.
         for path in shadow_root.rglob("*"):
             if path.is_file() and path.suffix in {".fsh", ".vsh", ".glsl"}:
                 content = path.read_text(encoding="utf-8")
-                content = INCLUDE.sub(lambda match: match.group(1) + '"' + os.path.relpath(shadow_root / match.group(2), path.parent) + '"', content)
+                content = INCLUDE.sub(lambda match: match.group(1) + '"' + str(shadow_root / match.group(2)) + '"', content)
                 path.write_text(content, encoding="utf-8")
 
         for source in stages:
