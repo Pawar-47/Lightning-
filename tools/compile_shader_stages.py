@@ -2,7 +2,7 @@
 """Compile every Lightning .fsh/.vsh entrypoint with glslangValidator.
 
 This is an offline GLSL syntax/semantic smoke test, not an Iris runtime test.
-Iris shaderpack-root includes are rewritten as absolute temporary paths for glslang only.
+Iris shaderpack-root includes are expanded in memory for the compiler only.
 """
 from __future__ import annotations
 
@@ -15,13 +15,41 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SHADERS = ROOT / "shaders"
-INCLUDE = re.compile(r'(?m)^(\s*#\s*include\s+)"/([^"]+)"')
-VERSION = re.compile(r"(?m)^(\s*#\s*version\s+\d+[^\n]*)(\n|$)")
+INCLUDE = re.compile(r'^\s*#\s*include\s+"([^"]+)"')
 
 
 def fail(message: str) -> None:
     print(f"ERROR: {message}", file=sys.stderr)
     raise SystemExit(1)
+
+
+def expand_includes(path: Path, stack: tuple[Path, ...] = ()) -> str:
+    resolved = path.resolve()
+    if resolved in stack:
+        chain = " -> ".join(p.relative_to(SHADERS).as_posix() for p in (*stack, resolved))
+        fail(f"circular shader include: {chain}")
+    if not resolved.is_file():
+        fail(f"shader include does not exist: {resolved}")
+
+    output: list[str] = []
+    for line_number, line in enumerate(resolved.read_text(encoding="utf-8").splitlines(), 1):
+        match = INCLUDE.match(line)
+        if not match:
+            output.append(line)
+            continue
+
+        include_name = match.group(1)
+        if include_name.startswith("/"):
+            target = SHADERS / include_name.lstrip("/")
+        else:
+            target = resolved.parent / include_name
+        if not target.is_file():
+            fail(f"{resolved.relative_to(SHADERS)}:{line_number}: unresolved include {include_name}")
+
+        output.append(f"// BEGIN INCLUDE {target.relative_to(SHADERS).as_posix()}")
+        output.append(expand_includes(target, (*stack, resolved)))
+        output.append(f"// END INCLUDE {target.relative_to(SHADERS).as_posix()}")
+    return "\n".join(output) + "\n"
 
 
 def main() -> None:
@@ -39,39 +67,15 @@ def main() -> None:
     failures: list[tuple[str, str]] = []
     with tempfile.TemporaryDirectory(prefix="lightning-glsl-") as temporary:
         temp_root = Path(temporary)
-        shadow_root = temp_root / "shaders"
-        shutil.copytree(SHADERS, shadow_root)
-
-        # Iris treats a leading slash in #include paths as shaderpack-root
-        # relative. Rewrite each include to the corresponding absolute file
-        # in the temporary tree; tracked source files remain untouched.
-        for path in shadow_root.rglob("*"):
-            if path.is_file() and path.suffix in {".fsh", ".vsh", ".glsl"}:
-                content = path.read_text(encoding="utf-8")
-                content = INCLUDE.sub(lambda match: match.group(1) + '"' + str(shadow_root / match.group(2)) + '"', content)
-                path.write_text(content, encoding="utf-8")
-
         for source in stages:
             relative = source.relative_to(SHADERS)
             stage = "vert" if source.suffix == ".vsh" else "frag"
-            content = (shadow_root / relative).read_text(encoding="utf-8")
-            match = VERSION.search(content)
-            if not match:
-                failures.append((relative.as_posix(), "missing #version directive"))
-                continue
+            expanded = expand_includes(source)
+            temporary_entry = temp_root / relative
+            temporary_entry.parent.mkdir(parents=True, exist_ok=True)
+            temporary_entry.write_text(expanded, encoding="utf-8")
 
-            # GL_GOOGLE_include_directive is used only for this compiler
-            # smoke test; Iris itself supplies its own shaderpack preprocessor.
-            insertion = match.end(1)
-            content = content[:insertion] + "\n#extension GL_GOOGLE_include_directive : require" + content[insertion:]
-            temporary_entry = shadow_root / relative
-            temporary_entry.write_text(content, encoding="utf-8")
-
-            command = [
-                compiler,
-                "-S", stage,
-                str(temporary_entry),
-            ]
+            command = [compiler, "-S", stage, str(temporary_entry)]
             result = subprocess.run(
                 command,
                 cwd=temp_root,
