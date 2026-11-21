@@ -21,14 +21,16 @@ jobs:
           python-version: "3.12"
       - name: Validate shader source structure
         run: python tools/validate_shaderpack.py
-      - name: Syntax-check uploaded-source audit tool
-        run: python -m py_compile tools/verify_source_port.py tools/compile_shader_stages.py
+      - name: Syntax-check audit and test tools
+        run: python -m py_compile tools/verify_source_port.py tools/compile_shader_stages.py tools/run_iris_smoke.py
       - name: Install GLSL compiler
         run: |
           sudo apt-get update
           sudo apt-get install --yes glslang-tools
       - name: Compile every shader entrypoint
         run: python tools/compile_shader_stages.py
+      - name: Install headless graphics runtime
+        run: sudo apt-get install --yes xvfb libgl1-mesa-dri
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
@@ -38,8 +40,18 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
       - name: Build shaderpack ZIP
         run: ./gradlew --no-daemon zipShaderpack
+      - name: Iris development-client smoke test
+        run: python tools/run_iris_smoke.py
       - name: Upload shaderpack artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: Lightning-shaderpack
           path: build/releases/*.zip
+      - name: Upload Iris smoke log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Lightning-iris-smoke-log
+          path: build/iris-smoke.log
+          if-no-files-found: ignore
