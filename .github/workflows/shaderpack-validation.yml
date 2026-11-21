@@ -22,7 +22,13 @@ jobs:
       - name: Validate shader source structure
         run: python tools/validate_shaderpack.py
       - name: Syntax-check uploaded-source audit tool
-        run: python -m py_compile tools/verify_source_port.py
+        run: python -m py_compile tools/verify_source_port.py tools/compile_shader_stages.py
+      - name: Install GLSL compiler
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes glslang-tools
+      - name: Compile every shader entrypoint
+        run: python tools/compile_shader_stages.py
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
