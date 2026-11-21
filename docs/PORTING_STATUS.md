@@ -36,7 +36,7 @@ The uploaded archive contains 348 actual files (742,051 uncompressed bytes) afte
 - All 17 reference and shader metadata files are separately accounted for in the source ledger.
 - The two archive-specific exceptions (`shaders/lib/config.glsl` and `shaders/shaders.properties`) are intentionally customized/merged. Their exact original Git blob hashes are recorded in the final column of `reference/source-file-map.csv`; the active config is feature-restored and tuned, while the active root properties file merges the original settings UI with Lightning profiles.
 - The source `shaders/shaders.properties` is intentionally relocated/merged into the pack-root `shaders.properties`.
-- All 210 entrypoints declare GLSL 330. Shared shader modules retain their source contents except for the three documented deterministic early-exit optimization derivatives.
+- All 210 archive-derived entrypoints declare GLSL 330. The template foundation contributes two additional `gbuffers_textured_lit` vertex/fragment entrypoints, bringing the distributable compiler matrix to 212 stages. Shared shader modules retain their source contents except for the three documented deterministic early-exit optimization derivatives.
 - Full MakeUp settings UI and original option screens are present. Lightning adds `Performance` and `Quality` profiles.
 - Performance profile retains the major effects. It uses bounded budgets and the cheaper depth-based godray path (`VOL_LIGHT=1`); Quality retains the full shadow-aware volumetric-light path (`VOL_LIGHT=2`).
 - Added `tools/validate_shaderpack.py`, `tools/verify_source_port.py` and `.github/workflows/shaderpack-validation.yml`.

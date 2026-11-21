@@ -33,8 +33,8 @@ def main() -> None:
         path for path in SHADERS.rglob("*")
         if path.is_file() and path.suffix in {".fsh", ".vsh"}
     )
-    if len(stages) != 210:
-        fail(f"expected 210 shader entrypoints, found {len(stages)}")
+    if len(stages) != 212:
+        fail(f"expected 212 shader entrypoints (210 ported plus 2 template-provided), found {len(stages)}")
 
     failures: list[tuple[str, str]] = []
     with tempfile.TemporaryDirectory(prefix="lightning-glsl-") as temporary:
@@ -92,7 +92,7 @@ def main() -> None:
             print(f"... and {len(failures) - 30} additional compiler failure(s)")
         fail(f"{len(failures)} of {len(stages)} shader entrypoints failed GLSL compilation")
 
-    print(f"PASS: glslangValidator compiled all {len(stages)} GLSL 330 vertex/fragment entrypoints")
+    print(f"PASS: glslangValidator compiled all {len(stages)} GLSL 330 vertex/fragment entrypoints (210 archive-derived plus 2 template-provided)")
     print("NOTE: this does not replace Iris runtime loading, GPU-driver compilation, visual testing or FPS benchmarking")
 
 
