@@ -161,8 +161,8 @@ if map_path.is_file():
     if len(set(paths)) != len(paths) or any(not p for p in paths):
         fail("source-file ledger contains blank or duplicate source paths")
     verified_rows = [row for row in rows if row.get("zip_comparison") == "ZIP_GIT_BLOB_HASH_MATCH"]
-    if len(verified_rows) != 343:
-        fail(f"expected 343 exact/version-only source-to-port rows, found {len(verified_rows)}")
+    if len(verified_rows) != 344:
+        fail(f"expected 344 exact/version-only source-to-port rows, found {len(verified_rows)}")
     optimized_rows = {row.get("source_path") for row in rows if row.get("zip_comparison") == "ZIP_OPTIMIZED_PATCH"}
     expected_optimized_rows = {
         "shaders/lib/volumetric_clouds.glsl",

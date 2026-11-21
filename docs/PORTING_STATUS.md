@@ -33,7 +33,6 @@ The uploaded archive contains 348 actual files (742,051 uncompressed bytes) afte
 - **Source-to-port comparison: 346/348 files are reproducibly verified through deterministic transformations.** 134 files are byte-identical to the uploaded ZIP; all 210 `.fsh/.vsh` entrypoints differ only by the `#version 120` → `#version 330 compatibility` migration; two library modules have explicitly documented, reproducible cloud-opacity early-exit optimizations. The two config/options exceptions remain separately identified.
 - The 100 shared modules comprise 41 `common/`, 37 non-config `lib/`, and 22 `src/` files. Of the 37 non-config library files, 35 remain byte-identical and two are tracked deterministic optimization derivatives.
 - All 15 language/texture assets have exact uploaded-ZIP hash matches.
-- All 17 reference and shader metadata files are separately accounted for in the source ledger.
 - The two archive-specific exceptions (`shaders/lib/config.glsl` and `shaders/shaders.properties`) are intentionally customized/merged. Their exact original Git blob hashes are recorded in the final column of `reference/source-file-map.csv`; the active config is feature-restored and tuned, while the active root properties file merges the original settings UI with Lightning profiles.
 - The source `shaders/shaders.properties` is intentionally relocated/merged into the pack-root `shaders.properties`.
 - All 210 archive-derived entrypoints declare GLSL 330. The template foundation contributes two additional `gbuffers_textured_lit` vertex/fragment entrypoints, bringing the distributable compiler matrix to 212 stages. Shared shader modules retain their source contents except for the two documented deterministic cloud-opacity early-exit derivatives.
@@ -55,16 +54,16 @@ See [`SOURCE_PORT_VERIFICATION.md`](SOURCE_PORT_VERIFICATION.md) for the per-fam
 ## Known gaps — do not mark complete
 
 1. Pass the new GLSL compiler gate for all 212 entrypoints and resolve any genuine source failures.
-3. Minecraft + Iris + Sodium runtime shader-load and dimension/feature smoke tests.
-4. Visual comparison across Overworld, Nether, End, water, clouds, shadows and post-processing.
-5. FPS/frame-time benchmark on the Intel Core i3-5005U / Intel HD 5500 / 8 GB Linux Mint target laptop.
-6. The installed Minecraft/Iris/Sodium versions have not yet been confirmed; template defaults are provisional.
-7. No published release yet. Do not present a CI ZIP as a finished, hardware-validated release.
+2. Minecraft + Iris + Sodium runtime shader-load and dimension/feature smoke tests.
+3. Visual comparison across Overworld, Nether, End, water, clouds, shadows and post-processing.
+4. FPS/frame-time benchmark on the Intel Core i3-5005U / Intel HD 5500 / 8 GB Linux Mint target laptop.
+5. The installed Minecraft/Iris/Sodium versions have not yet been confirmed; template defaults are provisional.
+6. No published release yet. Do not present a CI ZIP as a finished, hardware-validated release.
 
 ## Next work order
 
 1. Pass the new GLSL compiler gate and resolve any genuine shader compile failures.
-3. Run Iris runtime loading and dimension/feature smoke tests.
-4. Compare visual output and tune performance budgets without silently removing major effects.
-5. Benchmark on the target laptop.
-6. Publish a versioned release with exact validation boundaries and reproducible artifacts.
+2. Run Iris runtime loading and dimension/feature smoke tests.
+3. Compare visual output and tune performance budgets without silently removing major effects.
+4. Benchmark on the target laptop.
+5. Publish a versioned release with exact validation boundaries and reproducible artifacts.
