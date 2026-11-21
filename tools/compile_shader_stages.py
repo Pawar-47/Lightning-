@@ -81,7 +81,14 @@ def main() -> None:
                 lines = expanded.splitlines()
                 if not lines or not lines[0].startswith("#version"):
                     fail(f"{relative.as_posix()}: missing leading #version")
-                expanded = "\n".join([lines[0], *injected, *lines[1:]]) + "\n"
+                extension_end = 1
+                while extension_end < len(lines) and lines[extension_end].lstrip().startswith("#extension"):
+                    extension_end += 1
+                expanded = "\n".join([
+                    *lines[:extension_end],
+                    *injected,
+                    *lines[extension_end:],
+                ]) + "\n"
 
             temporary_entry = temp_root / relative
             temporary_entry.parent.mkdir(parents=True, exist_ok=True)
